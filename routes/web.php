@@ -22,6 +22,8 @@ Route::middleware([CheckIsLogged::class])->group(function(){
         Route::get('listar30', [ChamadoController::class, 'listar30'])->name('chamado.listar30');
         Route::get('novo', [ChamadoController::class, 'novo'])->name('chamado.novo');
         Route::get('detail/{id}', [ChamadoController::class, 'detail'])->name('chamado.detail');
+        Route::post('select_services', [ChamadoController::class, 'selectServicos'])->name('chamado.select_services');
+        Route::post('insert', [ChamadoController::class, 'save'])->name('chamado.insert');
     });
 });
 

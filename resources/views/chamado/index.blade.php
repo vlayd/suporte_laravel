@@ -28,7 +28,7 @@
             </div>
             <div class="ms-auto my-auto mt-lg-0 mt-4">
               <div class="ms-auto my-auto">
-                <a href="" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Novo chamado</a>
+                <a href="{{route('chamado.novo')}}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Novo chamado</a>
               </div>
             </div>
           </div>
@@ -37,6 +37,7 @@
         <div class="card-body px-0 pb-0" id="tabela_chamado">
 
         </div>
+
       </div>
     </div>
   </div>
@@ -44,6 +45,21 @@
 @endsection
 
 @section('js')
+
+@if (session()->has('message'))
+<script>
+    addEventListener('DOMContentLoaded', () =>{
+        Swal.fire({
+        title: "Sucesso",
+        text: "<?=session('message')?>",
+        icon: "success",
+  showConfirmButton: false,
+  timer: 1500
+      });
+    });
+
+</script>
+@endif
 <script>
     var item = 'Dashboard';
     var subItem = 'Home'

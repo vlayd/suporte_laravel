@@ -19,12 +19,15 @@ $page = '';
   <!-- Nucleo Icons -->
   <link href="{{asset('assets/css/nucleo-icons.css')}}" rel="stylesheet" />
   <link href="{{asset('assets/css/nucleo-svg.css')}}" rel="stylesheet" />
+  @yield('css')
   <!-- Font Awesome Icons -->
   <link href="{{asset('assets/fontawesome/css/all.min.css')}}" rel="stylesheet" />
   <link href="{{asset('assets/fontawesome/fontawesome/css/all.min.css')}}" rel="stylesheet" />
   <!-- CSS Files -->
   <link href="{{asset('assets/css/jquery.toast.min.css')}}" rel="stylesheet" />
   <link id="pagestyle" href="{{asset('assets/css/argon-dashboard.css?v=2.0.5')}}" rel="stylesheet" />
+<script src="{{asset('assets/js/plugins/sweetalert2.min.js')}}"></script>
+
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -171,6 +174,7 @@ $page = '';
   <script src="{{asset('assets/js/plugins/jquery.toast.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
+
   <!-- Kanban scripts -->
   <script src="{{asset('assets/js/plugins/jkanban/jkanban.js')}}"></script>
   <script>

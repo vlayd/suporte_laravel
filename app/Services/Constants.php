@@ -59,3 +59,18 @@ define(
         'status.nome AS nomeStatus'
     ]
 );
+
+define(
+    'SELECT_CHAT_DETAIL',
+    [
+        'chat.id AS idChat',
+        'chat.id_chamado',
+        'chat.id_usuario',
+        'chat.texto',
+        'chat.data',
+        'chat.anexo',
+        'anexos.arquivo',
+        'U.nome',
+        'U.foto',
+    ]
+);

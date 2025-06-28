@@ -1,6 +1,6 @@
 if (document.getElementById('choices-1')) {
   var element = document.getElementById('choices-1');
-  const example = new Choices(element, {
+  new Choices(element, {
     searchEnabled: true,
     placeholder: true,
     searchPlaceholderValue: null,
@@ -20,16 +20,28 @@ if (document.getElementById('choices-basic')) {
   if (document.getElementById('choices-basic-2')) {
       var element = document.getElementById('choices-basic-2');
       new Choices(element, {
-        searchEnabled: true,
-        placeholder: true,
-        searchPlaceholderValue: null,
-        position: 'auto'
+          searchEnabled: true,
+          placeholder: true,
+          searchPlaceholderValue: 'Digite aqui...',
+          position: 'auto',
+          shouldSort: false,
       });
-    };
+  };
+
+if (document.getElementById('choices-basic-3')) {
+    var element3 = document.getElementById('choices-basic-3');
+    new Choices(element3, {
+        placeholder: true,
+        searchEnabled: true,
+        searchPlaceholderValue: 'Digite aqui...',
+        position: 'auto',
+        shouldSort: false,
+    });
+};
 
 if (document.getElementById('choices-2')) {
   var element = document.getElementById('choices-2');
-  const example = new Choices(element, {
+  new Choices(element, {
     searchEnabled: true,
     placeholder: true,
     searchPlaceholderValue: null,
@@ -38,7 +50,7 @@ if (document.getElementById('choices-2')) {
 
 if (document.getElementById('choices-3')) {
   var element = document.getElementById('choices-3');
-  const example = new Choices(element, {
+  new Choices(element, {
     searchEnabled: true,
     placeholder: true,
     searchPlaceholderValue: null,
@@ -47,7 +59,7 @@ if (document.getElementById('choices-3')) {
 
 if (document.getElementById('choices-4')) {
   var element = document.getElementById('choices-4');
-  const example = new Choices(element, {
+  new Choices(element, {
     searchEnabled: true,
     placeholder: true,
     searchPlaceholderValue: null,
@@ -56,7 +68,7 @@ if (document.getElementById('choices-4')) {
 
 if (document.getElementById('choices-5')) {
   var element = document.getElementById('choices-5');
-  const example = new Choices(element, {
+  new Choices(element, {
     searchEnabled: true,
     placeholder: true,
     searchPlaceholderValue: null,
@@ -65,14 +77,14 @@ if (document.getElementById('choices-5')) {
 
   if (document.getElementById('choices-6')) {
     var element = document.getElementById('choices-6');
-    const example = new Choices(element, {
+    new Choices(element, {
       searchEnabled: false
     });
   };
 
   if (document.getElementById('choices-7')) {
     var element = document.getElementById('choices-7');
-    const example = new Choices(element, {
+    new Choices(element, {
       searchEnabled: false
     });
   };

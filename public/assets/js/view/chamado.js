@@ -1,30 +1,39 @@
+$.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 // ========VARIÁVEIS BASE=============
 var url = window.location.href;
 var baseUrl = $('#base_url').html();
+var oldCategoria = $('#old_categoria').html();
+var oldServico = $('#old_servico').html();
 
-// Capturar evento de submit do formulário
-const botao = document.querySelector('#botoes');
 
 // ========INICIALIZAÇÃO=============
 $(document).ready(function() {
     if(document.getElementById('tabela_chamado')) listar('30');
+    changeServico(oldCategoria, oldServico);
 });
 
-botao.addEventListener('click', function(e){
-    const id = e.target.id;
-    const idButtonsPeriodo = ['btn30_dias', 'btn_tudo'];
-    const idButtonsStatus = ['status1', 'status2', 'status3', 'status4', 'status5'];
-    if(idButtonsStatus.includes(id)){
-        $('.botao_status').removeClass('btn-success');
-        $('#'+id).addClass('btn-success');
-        showTrStatus(id);
-    } else if(idButtonsPeriodo.includes(id)){
-        $('.botao_periodo').removeClass('btn-primary');
-        $('.botao_status').removeClass('btn-success');
-        $('#status1').addClass('btn-success');
-        $('#'+id).addClass('btn-primary');
-    }
-});
+// Capturar evento de submit do formulário
+if(document.querySelector('#botoes')){
+    document.querySelector('#botoes').addEventListener('click', function(e){
+        const id = e.target.id;
+        const idButtonsPeriodo = ['btn30_dias', 'btn_tudo'];
+        const idButtonsStatus = ['status1', 'status2', 'status3', 'status4', 'status5'];
+        if(idButtonsStatus.includes(id)){
+            $('.botao_status').removeClass('btn-success');
+            $('#'+id).addClass('btn-success');
+            showTrStatus(id);
+        } else if(idButtonsPeriodo.includes(id)){
+            $('.botao_periodo').removeClass('btn-primary');
+            $('.botao_status').removeClass('btn-success');
+            $('#status1').addClass('btn-success');
+            $('#'+id).addClass('btn-primary');
+        }
+    });
+}
 
 function listar(periodo = '') {
     $.ajax({
@@ -44,4 +53,31 @@ function showTrStatus(classStatus){
     $('.status4').addClass('d-none');
     $('.status5').addClass('d-none');
     $('.'+classStatus).removeClass('d-none');
+}
+
+function changeServico(categoria, servico) {
+    // $("#choices_servicos").html(`<option value="">Selecione uma opção</option>`);
+            // $("#choices_servicos").append(`<option value="">Selecione uma opção</option>`);
+            // return;
+    $.ajax({
+        url: baseUrl + 'chamado/select_services',
+        method: 'POST',
+        dataType: 'html',
+        data: {
+            id_categoria: categoria,
+            id_servico: servico,
+        },
+        success: function (result) {
+            console.log(result);
+            $('#select_servicos').html(result);
+            // $.each(result, function(key, value) {
+            //     console.log(key + ' ' +value);
+            //     $('#choicesservicos').append(`<option value="${key}">${value}</option>`);
+            //   });
+        }
+    });
+}
+
+function teste() {
+    $('#choices_servicos').empty();
 }

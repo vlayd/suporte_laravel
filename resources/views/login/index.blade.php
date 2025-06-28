@@ -32,7 +32,7 @@
           <div class="card">
             <div class="card-header pb-0 text-center">
               <img src="{{asset('assets/img/apoio/logo_transp.png')}}" class="img-fluid" alt="Procon/Acre" style="width: 200px;">
-              <h3 class="font-weight-bolder">Sistema de RH</h3>
+              <h3 class="font-weight-bolder"><?= NAME_APP ?></h3>
             </div>
             <div class="card-body">
               <form role="form" class="text-start needs-validation" method="post" action="login" novalidate>
