@@ -13,7 +13,7 @@ var oldServico = $('#old_servico').html();
 // ========INICIALIZAÇÃO=============
 $(document).ready(function() {
     if(document.getElementById('tabela_chamado')) listar('30');
-    changeServico(oldCategoria, oldServico);
+    if(oldCategoria != '') changeServico(oldCategoria);
 });
 
 // Capturar evento de submit do formulário
@@ -55,10 +55,27 @@ function showTrStatus(classStatus){
     $('.'+classStatus).removeClass('d-none');
 }
 
-function changeServico(categoria, servico) {
-    // $("#choices_servicos").html(`<option value="">Selecione uma opção</option>`);
-            // $("#choices_servicos").append(`<option value="">Selecione uma opção</option>`);
-            // return;
+function changeServico(categoria) {
+    $.ajax({
+        url: baseUrl + 'chamado/select_services',
+        method: 'POST',
+        dataType: 'html',
+        data: {
+            id_categoria: categoria,
+            id_servico: oldServico,
+        },
+        success: function (result) {
+            console.log(result);
+            $('#select_servicos').html(result);
+            // $.each(result, function(key, value) {
+            //     console.log(key + ' ' +value);
+            //     $('#choicesservicos').append(`<option value="${key}">${value}</option>`);
+            //   });
+        }
+    });
+}
+
+function updateStatus() {
     $.ajax({
         url: baseUrl + 'chamado/select_services',
         method: 'POST',
@@ -76,8 +93,4 @@ function changeServico(categoria, servico) {
             //   });
         }
     });
-}
-
-function teste() {
-    $('#choices_servicos').empty();
 }

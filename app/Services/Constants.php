@@ -39,6 +39,20 @@ define(
 );
 
 define(
+    'SELECT_CHAMADO_EDIT',
+    [
+        'chamados.id AS idChamado',
+        'chamados.dt_criacao',
+        'chamados.titulo',
+        'chamados.status',
+        'chamados.solicitante',
+        'chamados.descricao',
+        'servicos.id AS idServico',
+        'servicos.id_categoria AS idCategoria',
+    ]
+);
+
+define(
     'SELECT_CHAMADO_DETAIL',
     [
         'chamados.id AS idChamado',

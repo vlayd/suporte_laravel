@@ -12,19 +12,12 @@ class MainController extends Controller
         if(!session('user')){
             return view('login/index');
         }
-        $naoIniciados = NAO_INICIADO_ADM;
-        $naoIniciados30 = NAO_INICIADO_ADM_30;
-        $emExecucao = EM_EXECUCAO_ADM;
-        $emExecucao30 = EM_EXECUCAO_ADM_30;
-        $pendentes = PENDENTE_ADM;
-        $pendentes30 = PENDENTE_ADM_30;
-        $finalizados = FINALIZADO_ADM;
-        $finalizados30 = FINALIZADO_ADM_30;
+
         $dados = [
-            'naoIniciados' => ['todos' => $naoIniciados, '30' => $naoIniciados30],
-            'emExecucao' => ['todos' => $emExecucao, '30' => $emExecucao30],
-            'pendentes' => ['todos' => $pendentes, '30' => $pendentes30],
-            'finalizados' => ['todos' => $finalizados, '30' => $finalizados30],
+            'naoIniciados' => ['todos' => NAO_INICIADO, '30' => NAO_INICIADO_30, 'nao_visto' => NAO_INICIADO_NAO_VISTO],
+            'emExecucao' => ['todos' => EM_EXECUCAO, '30' => EM_EXECUCAO_30, 'nao_visto' => EM_EXECUCAO_NAO_VISTO],
+            'pendentes' => ['todos' => PENDENTE, '30' => PENDENTE_30, 'nao_visto' => PENDENTE_NAO_VISTO],
+            'finalizados' => ['todos' => FINALIZADO, '30' => FINALIZADO_30, 'nao_visto' => FINALIZADO_NAO_VISTO],
         ];
 
         return view('home/index', $dados);

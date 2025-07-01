@@ -189,6 +189,9 @@ $page = '';
   @yield('js')
   <script src="{{asset('assets/js/argon-dashboard.min.js?v=2.0.5')}}" type="text/javascript"></script>
   <script src="{{asset('assets/js/view/pages.js')}}" type="text/javascript"></script>
+  @if (session('user.nivel') == 2)
+  <script src="{{asset('assets/js/utils/refresh_ajax.js')}}" type="text/javascript"></script>
+  @endif
   @yield('js2')
 </body>
 

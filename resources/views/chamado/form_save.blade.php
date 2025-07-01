@@ -8,6 +8,9 @@
 @endsection
 
 @section('content')
+<?php
+$selectServico = $chamado->servico??old('servico');
+?>
 <div class="d-none" id="old_categoria">{{old('categoria')??''}}</div>
 <div class="d-none" id="old_servico">{{old('servico')??''}}</div>
 <div class="row">
@@ -24,7 +27,7 @@
                     <div class="row">
                         <div class="col-6">
                             <label class="form-label mt-3">Categoria</label>
-                            <select class="form-control" onchange="changeServico(this.value)" name="categoria" id="choices-basic" data-trigger>
+                            <select class="form-control" onchange="changeServico(this.value, <?=old('servico')??''?>)" name="categoria" id="choices-basic" data-trigger>
                                 <option value="">Escolha</option>
                                 @foreach ($categorias as $categoria)
                                 <option value="{{$categoria->id}}" @if(old('categoria')==$categoria->id) {{'selected'}} @endif>{{$categoria->nome}}</option>
@@ -37,6 +40,9 @@
                         </div>
                         <div class="col-6">
                             <div id="select_servicos">
+                                @if (!old('categoria'))
+                                    @include('layouts.select.select_servicos', ['idServico' => $selectServico, 'servicos' => [] ])
+                                @endif
                             </div>
                             {{-- show error --}}
                             @error('servico')
@@ -46,24 +52,27 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-{{session('user.nivel') == 2?'6':'12'}}">
                             <label class="form-label mt-3">Título</label>
-                            <input class="form-control" type="text" name="titulo" id="titulo" value="{{old('titulo')}}">
+                            <input class="form-control" type="text" name="titulo" id="titulo" value="{{$chamado->titulo??old('titulo')}}">
                             {{-- show error --}}
                             @error('titulo')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
                         </div>
+                        @if (session('user.nivel') == 2)
                         <div class="col-6">
                             <label class="form-label mt-3">Solicitante</label>
                             <select class="form-control" name="solicitante" id="choices-basic-3" data-trigger>
                                 <option value="">Escolha</option>
                                 @foreach ($servidores as $servidor)
-                                <option value="{{$servidor->id}}">{{$servidor->nome}}</option>
+                                <option value="{{$servidor->id}}" @if(old('solicitante')==$servidor->id) {{'selected'}} @endif>{{$servidor->nome}}</option>
                                 @endforeach
                                 <option value="1000">Núcleo TI</option>
                             </select>
                         </div>
+                        @endif
+
                     </div>
 
                     <div class="row mt-3">
@@ -83,6 +92,10 @@
                         <div class="col-12 mt-3">
                             <label for="input_anexo" class="form-label">Anexos</label>
                             <input class="form-control" name="anexos[]" type="file" id="input_anexo" multiple>
+                            {{-- show error --}}
+                            @error('anexos')
+                                <div class="text-danger">{{$message}}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -102,8 +115,8 @@
                     </div>
 
                     <div class="d-flex justify-content-start mt-4">
-                        <button type="button" name="button" onclick="teste()" class="btn btn-light m-0">Cancel</button>
-                        <button type="submit" id="btnSave" class="btn bg-gradient-primary m-0 ms-2">Salvar</button>
+                        <button type="button" name="button" class="btn btn-light m-0">Cancel</button>
+                        <button type="submit" class="btn bg-gradient-primary m-0 ms-2">Salvar</button>
                     </div>
                 </form>
             </div>

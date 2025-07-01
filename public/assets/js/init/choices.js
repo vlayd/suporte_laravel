@@ -28,6 +28,18 @@ if (document.getElementById('choices-basic')) {
       });
   };
 
+  if(document.getElementById('choices_servicos')) {
+    var element = document.getElementById('choices_servicos');
+    new Choices(element, {
+        searchEnabled: true,
+        placeholder: true,
+        searchPlaceholderValue: 'Digite aqui...',
+        position: 'auto',
+        shouldSort: false,
+    });
+  }
+
+
 if (document.getElementById('choices-basic-3')) {
     var element3 = document.getElementById('choices-basic-3');
     new Choices(element3, {

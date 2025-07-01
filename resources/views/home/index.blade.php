@@ -6,7 +6,7 @@
 @section('content')
 <?php
     $txtSolicitacao = 'Minhas Solicitações';
-    if (session('nivel') == 2) $txtSolicitacao = 'Solicitações dos Usuários'
+    if (session('user.nivel') == 2) $txtSolicitacao = 'Solicitações dos Usuários'
 ?>
 <div class="card shadow-lg mx-4 mt-7">
     <div class="card-body p-3">
@@ -43,7 +43,7 @@
                     <div class="card border-1 bg-secondary">
                         <div class="card-body p-3 position-relative">
                             <div class="row">
-                                <div class="col" id="totalNaoIniciada">
+                                <div class="col" id="total_nao_iniciado">
                                     <div class="numbers text-center">
                                         <p class="fs-1 mb-0 font-weight-bold text-white">
                                             <span class="mes_30"><?=$naoIniciados['30']?></span>
@@ -55,9 +55,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span id="badgeNaoIniciadaNaoVisto" class="position-absolute top-0 start-100 translate-middle badge badge-lg badge-circle bg-danger">
-                                <span id="totalNaoIniciadaNaoVisto">10</span>
-                            </span>
+                            @include('layouts.badges.badge_nao_visto', ['value' => $naoIniciados['nao_visto'], 'id' => 'nao_iniciado'])
                         </div>
                     </div>
                 </div>
@@ -78,9 +76,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span id="badgeEmExecucaoNaoVisto" class="position-absolute top-0 start-100 translate-middle badge badge-lg badge-circle bg-danger">
-                                <span id="totalEmExecucaoNaoVisto">10</span>
-                            </span>
+                            @include('layouts.badges.badge_nao_visto', ['value' => $emExecucao['nao_visto'], 'id' => 'em_execucao'])
                         </div>
                     </div>
                 </div>
@@ -101,9 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span id="badgePendenteNaoVisto" class="position-absolute top-0 start-100 translate-middle badge badge-lg badge-circle bg-danger">
-                                <span id="totalPendenteNaoVisto">10</span>
-                            </span>
+                            @include('layouts.badges.badge_nao_visto', ['value' => $pendentes['nao_visto'], 'id' => 'pendente'])
                         </div>
                     </div>
                 </div>
@@ -124,9 +118,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span id="badgeFinalizadoNaoVisto" class="position-absolute top-0 start-100 translate-middle badge badge-lg badge-circle bg-danger">
-                                <span id="totalFinalizadoNaoVisto">10</span>
-                            </span>
+                            @include('layouts.badges.badge_nao_visto', ['value' => $finalizados['nao_visto'], 'id' => 'finalizado'])
                         </div>
                     </div>
                 </div>

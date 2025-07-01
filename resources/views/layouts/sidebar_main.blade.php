@@ -31,7 +31,11 @@
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                         <i class="fas fa-list text-warning text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Lista</span>
+                    <span class="nav-link-text mx-1">Lista </span>
+                    <span id="no_view_d" class="badge bg-danger badge-circle {{NAO_VISTO > 0 ?'':'d-none'}}">
+                        <div id="no_view_d2">{{NAO_VISTO}}</div>
+                    </span>
+                    <div class="d-none" id="no_view_e">{{NAO_VISTO}}</div>
                 </a>
             </li>
             <li class="nav-item">

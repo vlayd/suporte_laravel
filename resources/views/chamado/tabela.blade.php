@@ -30,19 +30,7 @@
                     </td>
                     <td class="text-sm"><?= $solicitante ?></td>
                     <td class="text-sm">
-                        <div class="">
-                            <a class="" href="#" id="dropdownMenuLink<?= $i ?>" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="badge badge-<?= $chamado['cor'] ?> dropdown-toggle"><?= $chamado['nomeStatus'] ?></span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink<?= $i ?>">
-                                <?php foreach ($status as $st) :
-                                    if ($st['nome'] == $chamado['nomeStatus']) continue; ?>
-                                    <li>
-                                        <a class="dropdown-item bg-<?= $st['cor'] ?> text-white text-center" href=""><?= $st['nome'] ?></a>
-                                    </li>
-                                <?php endforeach ?>
-                            </ul>
-                        </div>
+                        @include('layouts.select.select_status')
                     </td>
                     <td class="text-sm">
                         <a href="{{route('chamado.detail', Crypt::encrypt($chamado['idChamado']))}}" class="bg-primary p-2 rounded position-relative" target="_blank">
@@ -53,7 +41,7 @@
                             </span>
                             <?php endif?>
                         </a>
-                        <a href="" class="mx-3 bg-warning p-2 rounded">
+                        <a href="{{route('chamado.edit', Crypt::encrypt($chamado['idChamado']))}}" class="mx-3 bg-warning p-2 rounded">
                             <i class="fas fa-edit text-white fa-fw"></i>
                         </a>
                     </td>

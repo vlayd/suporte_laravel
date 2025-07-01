@@ -16,7 +16,8 @@
                 <div class="col-6 px-0 border">
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Status</div>
                     <div class="border text-sm py-3 px-2">
-                        <span class="badge badge-<?= $chamado['cor'] ?>"><?= $chamado['nomeStatus'] ?></span>
+
+                    @include('layouts.select.select_status')
                     </div>
                 </div>
                 <div class="col-12 col-lg px-0">
@@ -37,7 +38,17 @@
                 </div>
                 <div class="col-12 col-sm-6 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Atendente</div>
-                    <div class="border text-sm py-3 px-2"></div>
+                    <div class="border text-sm py-3 px-2">
+                        <?php
+                        $atendente = '<span class="text-danger">Aguardando...</span>';
+                        if($chamado['nomeAtendente']){
+                            $atendente = '<img class="avatar avatar-xs avatar-raised me-2" src="'.asset(PATH_APOIO . 'suporte2.png').'" alt="">'.
+                            explode(' ', $chamado['nomeAtendente'])[0];
+                        } ?>
+                        <span class="border p-2 rounded fw-bold text-primary">
+                            <?=$atendente?>
+                        </span>
+                    </div>
                 </div>
                 <div class="col-6 px-0 border">
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Solicitação</div>
