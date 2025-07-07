@@ -47,8 +47,9 @@ define(
         'chamados.status',
         'chamados.solicitante',
         'chamados.descricao',
-        'servicos.id AS idServico',
+        'chamados.servico',
         'servicos.id_categoria AS idCategoria',
+        'servicos.nome AS nomeServico',
     ]
 );
 
@@ -82,9 +83,18 @@ define(
         'chat.id_usuario',
         'chat.texto',
         'chat.data',
-        'chat.anexo',
-        'anexos.arquivo',
         'U.nome',
         'U.foto',
+    ]
+);
+
+define(
+    'SELECT_SERVICOS_INDEX',
+    [
+        'servicos.id AS idServico',
+        'servicos.nome AS nomeServico',
+        'servicos.status',
+        'categorias.id AS idCategoria',
+        'categorias.nome AS nomeCategoria',
     ]
 );

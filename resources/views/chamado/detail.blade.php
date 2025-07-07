@@ -1,5 +1,9 @@
 @extends('layouts.main_layout')
 
+@section('css')
+<link href="{{asset('assets/css/toastr.min.css')}}" rel="stylesheet" />
+@endsection
+
 @section('breadcrumb')
 @endsection
 
@@ -17,7 +21,7 @@
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Status</div>
                     <div class="border text-sm py-3 px-2">
 
-                    @include('layouts.select.select_status')
+                        @include('layouts.select.select_status')
                     </div>
                 </div>
                 <div class="col-12 col-lg px-0">
@@ -41,12 +45,12 @@
                     <div class="border text-sm py-3 px-2">
                         <?php
                         $atendente = '<span class="text-danger">Aguardando...</span>';
-                        if($chamado['nomeAtendente']){
-                            $atendente = '<img class="avatar avatar-xs avatar-raised me-2" src="'.asset(PATH_APOIO . 'suporte2.png').'" alt="">'.
-                            explode(' ', $chamado['nomeAtendente'])[0];
+                        if ($chamado['nomeAtendente']) {
+                            $atendente = '<img class="avatar avatar-xs avatar-raised me-2" src="' . asset(PATH_APOIO . 'suporte2.png') . '" alt="">' .
+                                explode(' ', $chamado['nomeAtendente'])[0];
                         } ?>
                         <span class="border p-2 rounded fw-bold text-primary">
-                            <?=$atendente?>
+                            <?= $atendente ?>
                         </span>
                     </div>
                 </div>
@@ -89,7 +93,6 @@
             </div>
             <div class="card-body overflow-auto overflow-x-hidden pb-4" id="div1">
                 <?php foreach ($chats as $chat) :
-                    $tmp = explode('.', $chat['arquivo']);
                     $nome = explode(' ', $chat['nome'])[0];
                     $foto = 'https://setor-rh.com/' . $chat['foto'];
                     $corNome = 'text-primary';
@@ -101,39 +104,45 @@
                         $corNome = 'text-warning';
                         $nome = $nome . ' <span class="badge badge-warning badge-sm">Suporte</span>';
                     }
-                        $align = 'justify-content-start text-right';
-                        // $color = 'bg-gray-200';
-                        $color = '';
-                        if ($chat['id_usuario'] == session('user.id')) {
+                    $align = 'justify-content-start text-right';
+                    // $color = 'bg-gray-200';
+                    $color = '';
+                    if ($chat['id_usuario'] == session('user.id')) {
                         $align = 'justify-content-end text-right';
                         $color = 'style="background-color: #D1F4CC;"';
-                        }
+                    }
                 ?>
-                    <div class="row <?= $align ?> mb-4 mt-3">
+                    <div class="row {{$align}} mb-4 mt-3">
                         <div class="col-auto mt-1">
-                            <img src="<?= $foto ?>" class="avatar avatar-md" alt="avatar image">
+                            <img src="{{$foto}}" class="avatar avatar-md" alt="avatar image">
                         </div>
                         <div class="col-auto">
-                            <div class="card" <?= $color ?>>
+                            <div class="card" <?=$color?>>
                                 <div class="card-body py-2 px-3">
-                                    <h6 class="mb-0 <?= $corNome ?>">
-                                        <?= $nome ?>
+                                    <h6 class="mb-0 {{$corNome}}">
+                                        <?=$nome?>
                                     </h6>
                                     <p class="mb-0">
-                                    <?= $chat['texto'] ?>
-                                    <?php if ($chat['arquivo'] != '') : ?>
-                                    <div class="col-auto">
-                                        <a href="<?= asset(PATH_UPLOAD.$chat['id_usuario'].'/'. $chat['arquivo']) ?>" class="text-primary" download="<?= $chat['arquivo'] ?>" target="_blank">
-                                            <img src="<?= asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file']) ?>" alt="" height="30" class="">
-                                            <span><?= $chat['arquivo'] ?></span>
-                                        </a>
+                                        <?=$chat['texto']?>
+                                        <?php
+                                        if($anexosChat):
+                                            foreach ($anexosChat as $anexoChat):
+                                                if($anexoChat['chat'] != $chat['idChat']) continue;
+                                                $tmp = explode('.', $anexoChat['arquivo']); ?>
+                                                <div class="col-auto">
+                                                    <a href="<?= asset(PATH_UPLOAD . $anexoChat['id_chamado'] . '/' . $anexoChat['arquivo']) ?>" class="text-primary" download="<?= $anexoChat['arquivo'] ?>" target="_blank">
+                                                        <img src="<?= asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file']) ?>" alt="" height="30" class="">
+                                                        <span><?= $anexoChat['nome'] ?></span>
+                                                    </a>
+                                                </div>
+                                            <?php
+                                             endforeach;
+                                        endif; ?>
+                                    </p>
+                                    <div class="d-flex align-items-center text-sm opacity-6 mt-n2">
+                                        <i class="ni ni-check-bold text-sm me-1"></i>
+                                        <small><?= date_format(date_create($chat['data']), 'd/m/Y à\s H:i') ?></small>
                                     </div>
-                                    <?php endif; ?>
-                                </p>
-                                <div class="d-flex align-items-center text-sm opacity-6 mt-n2">
-                                    <i class="ni ni-check-bold text-sm me-1"></i>
-                                    <small><?= date_format(date_create($chat['data']), 'd/m/Y à\s H:i') ?></small>
-                                </div>
                                 </div>
                             </div>
                         </div>
@@ -143,21 +152,23 @@
             <?php if ($chamado['statusChamado'] == 2 || $chamado['statusChamado'] == 3) : ?>
                 <div class="card-footer shadow-lg bg-gray-200 text-dark rounded rounded-3 pb-0 px-3" id="div2">
                     <h6 class="mb-3">Digitar uma mensagem</h6>
-                    <form action="" id="form-save-chat" method="post">
+                    <form id="form_save_chat">
+                        @csrf
                         <div class="row bg-white pb-4">
                             <div id="descricao_hid-1" class="d-none"></div>
                             <div class="col-12 col-lg-7 mt-3">
                                 <label class="form-label">Mensagem</label>
                                 <div id="descricao-1" style="height: 80px;"></div>
-                                <input type="hidden" name="descricao-1" id="hid_descricao-1" value="">
+                                <input type="hidden" name="descricao" id="hid_descricao-1" value="">
                             </div>
                             <div class="col-12 col-lg-5 mt-4">
                                 <div class="row">
                                     <label for="anexo_chat" class="form-label">Anexo</label>
-                                    <input class="form-control" name="anexo_chat[]" type="file" id="anexo_chat" multiple >
+                                    <input class="form-control" name="anexo_chat[]" type="file" id="anexo_chat" multiple>
+                                    <input name="id_chamado" type="hidden" value="{{Crypt::encrypt($chamado['idChamado'])}}">
                                     <div class="d-flex justify-content-start mt-4">
                                         <button type="button" name="button" class="btn btn-light m-0 px-sm-3">Cancelar</button>
-                                        <button type="submit" form="form-save-chat" id="btnSave" class="btn bg-gradient-primary m-0 ms-2 px-sm-3">Enviar</button>
+                                        <button type="submit" form="form_save_chat" id="btnSave" class="btn bg-gradient-primary m-0 ms-2 px-sm-3">Enviar</button>
                                     </div>
                                 </div>
                             </div>
@@ -179,6 +190,9 @@
 </script>
 <script src="{{asset('assets/js/plugins/quill.min.js')}}"></script>
 <script src="{{asset('assets/js/init/quill.js')}}"></script>
+<script src="{{asset('assets/js/plugins/toastr.min.js')}}"></script>
+<script src="{{asset('assets/js/init/toastr.js')}}"></script>
+<script src="{{asset('assets/js/view/chamado.js')}}"></script>
 @endsection
 
 @section('js2')

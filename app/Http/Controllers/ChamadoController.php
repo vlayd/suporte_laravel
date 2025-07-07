@@ -77,15 +77,17 @@ class ChamadoController extends Controller
         ->where('chamados.id', $id)
         ->first();
 
-        $anexosMain = DB::table('anexos')->where(['id_chamado' => $id])->get()->toArray();
+        $anexosMain = DB::table('anexos')->where(['id_chamado' => $id, 'chat' => 0])->get();
         $anexosMain = json_decode(json_encode($anexosMain), true);
+
+        $anexosChat = DB::table('anexos')->where([['id_chamado', '=', $id], ['chat', '!=', 0]])->get();
+        $anexosChat = json_decode(json_encode($anexosChat), true);
+
         $chats = DB::table('chat')
         ->select(SELECT_CHAT_DETAIL)
-        ->join('rh.usuarios as U', 'chat.id_usuario', '=', 'U.id')
-        ->join('anexos', 'chat.id', '=', 'anexos.chat')
+        ->join('rh.usuarios as U', 'chat.id_usuario', '=', 'U.id', 'left')
         ->where('chat.id_chamado', $id)
         ->get();
-
         $chats = json_decode(json_encode($chats), true);
 
         $chamado['dt_criacao'] = $this->formataDataTime($chamado['dt_criacao']);
@@ -94,6 +96,7 @@ class ChamadoController extends Controller
         $dados = [
             'chamado' => $chamado,
             'anexosMain' => $anexosMain,
+            'anexosChat' => $anexosChat,
             'chats' => $chats,
             'status' => $status,
         ];
@@ -103,9 +106,13 @@ class ChamadoController extends Controller
 
     public function novoEdit($idChamado = '')
     {
-        if($idChamado != '') $idChamado = $this->decriptId($idChamado);
+        if($idChamado != ''){
+            $idChamado = Operations::decriptId($idChamado);
+            if($idChamado == null || $idChamado == '') return redirect()->route('index');
+        }
+
         $categorias = DB::table('categorias')->get();
-        $servicos = DB::table('servicos')->get();
+        $servicos = [];
         $servidores = DB::connection('rh')->table('usuarios')->select(['id', 'nome'])->orderBy('nome')->whereNot('rh', 0)->get();
 
         $dados = [
@@ -113,10 +120,15 @@ class ChamadoController extends Controller
             'servidores' => $servidores,
             'servicos' => $servicos,
         ];
-        if($idChamado != '') $dados['chamado'] = DB::table('chamados')
-                                                    ->select(SELECT_CHAMADO_EDIT)
-                                                    ->join('servicos', 'chamados.servico', '=', 'servicos.id')
-                                                    ->where('chamados.id', $idChamado)->first();
+        if($idChamado != ''){
+            $chamado = DB::table('chamados')
+                            ->select(SELECT_CHAMADO_EDIT)
+                            ->join('servicos', 'chamados.servico', '=', 'servicos.id', 'left')
+                            ->where(['chamados.id'=> $idChamado])->first();
+            $dados['chamado'] = $chamado;
+            $dados['anexos'] = DB::table('anexos')->where(['id_chamado' => $idChamado, 'chat' => 0])->get();
+            $dados['servicos'] = DB::table('servicos')->where('id_categoria', $chamado->idCategoria)->get();
+        }
         return view('chamado/form_save', $dados);
     }
 
@@ -160,11 +172,53 @@ class ChamadoController extends Controller
             'descricao' => $request['descricao'],
             'solicitante' => $solicitante,
         ];
+        if(session('user.nivel') != 1) $dados['visto_adm'] = 1;
 
-        $lastId = DB::table('chamados')->insertGetId($dados);
+        $lastId = '';
+        if(!isset($request['idChamado'])){
+            $lastId = DB::table('chamados')->insertGetId($dados);
+        } else {
+            $lastId = $this->decriptId($request['idChamado']);
+            DB::table('chamados')->where('id', $lastId)->update($dados);
+        }
+
         if($request->hasFile('anexos')) $this->uploadFileMultiple($request->file('anexos'), $lastId);
 
         return redirect()->route('chamado')->with('message', 'Chamado enviado...!');
+    }
+
+    public function saveChat(Request $request)
+    {
+        $idChamado = $this->decriptId($request['id_chamado']);
+        $request->validate(
+            //rules
+            [
+                'anexo_chat.*' => 'extensions:jpeg,png,jpg,gif'
+            ],
+            //error messages
+            [
+                'anexo_chat.extensions' => 'Formato não aceito...',
+            ]
+        );
+        $idChat = '0';
+        $dados = [
+            'id_chamado' => $idChamado,
+            'texto' => $request['descricao'],
+            'id_usuario' => session('user.id')
+        ];
+
+        try {
+            $idChat = DB::table('chat')->insertGetId($dados);
+        } catch(\Throwable $e){
+            die('erro*Erro ao enviar mensagem!');
+        }
+        $visto = ['visto_adm' => 0];
+        if(session('user.nivel') != 1) $visto = ['visto_user' => 0];
+        DB::table('chamados')->where(['id' => $idChamado])->update($visto);
+
+        if($request->hasFile('anexo_chat')) $this->uploadFileMultiple($request->file('anexo_chat'), $idChamado, $idChat);
+
+        die('success*Mensagem enviada!');
     }
 
     public function updateStatus($idChamado, $idStatus){
@@ -186,4 +240,20 @@ class ChamadoController extends Controller
             return redirect()->back();
         }
     }
+
+    public function deleteAnexoChamado(Request $request)
+    {
+        $idAnexo = $request['id_anexo'];
+        $anexo = DB::table('anexos')->find($request['id_anexo']);
+        $nomeImage = $anexo->arquivo;
+        $idChamado = $anexo->id_chamado;
+        if($this->deleteAnexo(PATH_UPLOAD.$idChamado, $nomeImage)){
+            DB::table('anexos')->delete($idAnexo);
+            echo 'success';
+        } else  echo 'erro';
+    }
+
+
+
+
 }

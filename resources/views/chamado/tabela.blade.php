@@ -41,9 +41,15 @@
                             </span>
                             <?php endif?>
                         </a>
+                        @if ($chamado['status'] != 1 && session('user.nivel') == 1)
+                        <span class="mx-3 bg-secondary p-2 rounded">
+                            <i class="fas fa-edit text-white fa-fw"></i>
+                        </span>
+                        @else
                         <a href="{{route('chamado.edit', Crypt::encrypt($chamado['idChamado']))}}" class="mx-3 bg-warning p-2 rounded">
                             <i class="fas fa-edit text-white fa-fw"></i>
                         </a>
+                        @endif
                     </td>
                 </tr>
             <?php $i++;

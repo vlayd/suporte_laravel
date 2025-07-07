@@ -5,7 +5,6 @@
     $select = $idServico==$servico->id?'selected':'';?>
         <option value="<?=$servico->id?>" <?=$select?>><?=$servico->nome?></option>
     <?php endforeach?>
-        <option class="d-none" style="display: none !important;">Teste</option>
 </select>
 
 <script>

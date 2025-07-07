@@ -60,10 +60,12 @@ abstract class Controller
 
     protected function uploadFile($anexo, $idChamado, $chat = 0)
     {
-        $fileName = $anexo->getClientOriginalName();
+        $nomeName = $anexo->getClientOriginalName();
+        $fileName = time().'.'.$anexo->extension();
         $anexo->move(public_path(PATH_UPLOAD.$idChamado), $fileName);
 
         $dados = [
+            'nome' => $nomeName,
             'arquivo' => $fileName,
             'id_chamado' => $idChamado,
             'chat' => $chat,
@@ -71,24 +73,40 @@ abstract class Controller
         DB::table('anexos')->insert($dados);
     }
 
-    protected function uploadFileMultiple($anexos, $idChamado)
+    protected function uploadFileMultiple($anexos, $idChamado, $chat = 0)
     {
+        $i = 0;
         foreach ($anexos as $anexo) {
-            $fileName = $anexo->getClientOriginalName();
+            $nomeName = $anexo->getClientOriginalName();
+            $fileName = time().$i.'.'.$anexo->extension();
             $anexo->move(public_path(PATH_UPLOAD.$idChamado), $fileName);
 
             $dados = [
+                'nome' => $nomeName,
                 'arquivo' => $fileName,
                 'id_chamado' => $idChamado,
+                'chat' => $chat,
             ];
             DB::table('anexos')->insert($dados);
+            $i++;
         }
     }
 
     protected function decriptId($id)
     {
         $id = Operations::decriptId($id);
-        if($id == null) return redirect()->route('/');
-        return $id;
+        if($id == null || $id == '') return redirect()->route('index');
+        else return $id;
+    }
+
+    protected function deleteAnexo($path, $nome) {
+        try{
+            if(file_exists($path.'/'.$nome)){
+                unlink($path.'/'.$nome);
+                return true;
+            }
+        } catch(\Throwable $e){
+            return false;
+        }
     }
 }

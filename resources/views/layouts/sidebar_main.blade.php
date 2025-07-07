@@ -72,27 +72,21 @@
                 <div class="collapse " id="informacoesColapse">
                     <ul class="nav ms-4">
                         <li class="nav-item ">
+                            <a class="nav-link " href="{{route('categoria')}}">
+                                <span class="sidenav-mini-icon"> C </span>
+                                <span class="sidenav-normal"> Categoria </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{{route('servico')}}">
+                                <span class="sidenav-mini-icon"> S </span>
+                                <span class="sidenav-normal"> Serviços </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
                             <a class="nav-link " href="">
                                 <span class="sidenav-mini-icon"> S </span>
-                                <span class="sidenav-normal"> Setores </span>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link " href="">
-                                <span class="sidenav-mini-icon"> F </span>
-                                <span class="sidenav-normal"> Feriados </span>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link " href="">
-                                <span class="sidenav-mini-icon"> C </span>
-                                <span class="sidenav-normal"> Contratos </span>
-                            </a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link " href="">
-                                <span class="sidenav-mini-icon"> C </span>
-                                <span class="sidenav-normal"> Cargos </span>
+                                <span class="sidenav-normal"> Status </span>
                             </a>
                         </li>
                     </ul>
