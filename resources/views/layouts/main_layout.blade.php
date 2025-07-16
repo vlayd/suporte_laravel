@@ -40,9 +40,7 @@ $page = '';
     <nav class="navbar navbar-main navbar-expand-lg  px-0 mx-4 shadow-none border-radius-xl z-index-sticky " id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
         <!-- INÍCIO breadcrumb -->
-        <nav aria-label="breadcrumb">
             @yield('breadcrumb')
-        </nav>
         <!-- FIM breadcrumb -->
 
         <!-- INÍCIO MENU sandwich -->
@@ -78,9 +76,12 @@ $page = '';
               </a>
             </li>
             <li class="nav-item px-3 d-flex align-items-center">
-              <a href="#" class="nav-link text-white p-0">
-                <i class="fa fa-cog cursor-pointer"></i>
-              </a>
+                <a href="javascript:;" class="nav-link text-white p-0" data-bs-toggle="dropdown" id="navbarDropdownMenu" aria-expanded="false">
+                    <i class="fa fa-cog cursor-pointer"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{{route('logout')}}">Sair</a></li>
+                </ul>
             </li>
           </ul>
         </div>

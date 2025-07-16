@@ -1,9 +1,15 @@
+@php
+    $activeServico = 'active';
+    $activeInformacoes = 'active';
+    $showInformacoes = 'show';
+@endphp
 @extends('layouts.main_layout')
 
 @section('css')
 @endsection
 
 @section('breadcrumb')
+    <?=$breadcrumb?>
 @endsection
 
 @section('content')

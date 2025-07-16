@@ -10,21 +10,31 @@ class ChamadoController extends Controller
 {
     public function index()
     {
-        return view('chamado.index');
+        $dados = [
+            'breadcrumb' => $this->breadcrumb([
+                ['Chamados', route('chamado')], ['Lista']
+            ])
+        ];
+        return view('chamado.index', $dados);
     }
 
     public function listar()
     {
         $where = ['chamados.id', '!=', '0'];
         if(session('user.nivel') != '2') $where = ['solicitante', session('user.id')];
-        $chamados = DB::table('chamados')
+        try {
+            $chamados = DB::table('chamados')
         ->select(SELECT_CHAMADO_INDEX)
         ->join('rh.usuarios as S', 'chamados.solicitante', '=', 'S.id', 'LEFT')
         ->join('rh.usuarios as A', 'chamados.atendente', '=', 'A.id', 'LEFT')
         ->join('servicos', 'chamados.servico', '=', 'servicos.id')
         ->join('status', 'chamados.status', '=', 'status.id', 'LEFT')
-        ->where($where)
+        ->where([$where])
         ->get();
+        } catch (\Throwable $th) {
+            die($th->getMessage());
+        }
+
         $status = DB::table('status')->get();
         $chamados = json_decode(json_encode($chamados), true);
         $status = json_decode(json_encode($status), true);
@@ -72,6 +82,7 @@ class ChamadoController extends Controller
         ->select(SELECT_CHAMADO_DETAIL)
         ->join('rh.usuarios as S', 'chamados.solicitante', '=', 'S.id', 'LEFT')
         ->join('rh.usuarios as A', 'chamados.atendente', '=', 'A.id', 'LEFT')
+        ->join('rh.setores as ST', 'S.setor', '=', 'ST.id', 'LEFT')
         ->join('servicos', 'chamados.servico', '=', 'servicos.id')
         ->join('status', 'chamados.status', '=', 'status.id', 'LEFT')
         ->where('chamados.id', $id)
@@ -113,12 +124,15 @@ class ChamadoController extends Controller
 
         $categorias = DB::table('categorias')->get();
         $servicos = [];
-        $servidores = DB::connection('rh')->table('usuarios')->select(['id', 'nome'])->orderBy('nome')->whereNot('rh', 0)->get();
+        $servidores = DB::connection('rh')->table('usuarios')->select(['id', 'nome', 'setor'])->orderBy('nome')->whereNot('rh', 0)->get();
 
         $dados = [
             'categorias' => $categorias,
             'servidores' => $servidores,
             'servicos' => $servicos,
+            'breadcrumb' => $this->breadcrumb([
+                ['Chamados', route('chamado')], ['Novo']
+            ])
         ];
         if($idChamado != ''){
             $chamado = DB::table('chamados')
@@ -164,13 +178,19 @@ class ChamadoController extends Controller
         );
 
 
-        $solicitante = session('user.id');
-        if(isset($request['solicitante']) && $request['solicitante'] != '') $solicitante = $request['solicitante'];
+        $idSolicitante = session('user.id');
+        $setorSolicitante = session('user.setor');
+        if(isset($request['solicitante']) && $request['solicitante'] != ''){
+            $solicitante = explode('.', $request['solicitante']);
+            $idSolicitante = $solicitante[0];
+            $setorSolicitante = $solicitante[1];
+        }
         $dados = [
             'servico' => $request['servico'],
             'titulo' => $request['titulo'],
             'descricao' => $request['descricao'],
-            'solicitante' => $solicitante,
+            'solicitante' => $idSolicitante,
+            'setor' => $setorSolicitante,
         ];
         if(session('user.nivel') != 1) $dados['visto_adm'] = 1;
 
@@ -253,7 +273,42 @@ class ChamadoController extends Controller
         } else  echo 'erro';
     }
 
+    public function cancelaChamado(Request $request)
+    {
+        $idChamado = $request['idChamado'];
+        $cancelado = DB::table('chamados')->where('id', $idChamado)->update(['status' => 5]);
+        if($cancelado == 1) echo 'success';
+        else echo 'erro';
+    }
+
+    public function analitico()
+    {
+        return view('chamado.relatorio.analitico');
+    }
 
 
+
+    public function pdfAnalitico(Request $request)
+    {
+        $hoje = date('Y-m-d', strtotime('+1 days'));
+        $primeiroDiaMes = date("Y-m-01", strtotime('+1 days'));
+        $inicio = $request['data_inicio']!=''?$request['data_inicio']:$hoje;
+        $fim = $request['data_fim']!=''?$request['data_fim']:$primeiroDiaMes;
+        $chamados = DB::table('chamados')
+        ->select(SELECT_CHAMADO_ANALICO)
+        ->join('rh.usuarios as S', 'chamados.solicitante', '=', 'S.id', 'LEFT')
+        ->join('rh.usuarios as A', 'chamados.atendente', '=', 'A.id', 'LEFT')
+        ->join('rh.setores as ST', 'S.setor', '=', 'ST.id', 'LEFT')
+        ->join('servicos', 'chamados.servico', '=', 'servicos.id')
+        ->join('status', 'chamados.status', '=', 'status.id', 'LEFT')
+        ->whereBetween('dt_criacao', [$inicio, $fim])
+        ->get();
+        // dd($chamados);
+        $dados= [
+            'type' => 'analitico',
+            'chamados' => $chamados,
+        ];
+        return view('chamado.pdf.gerador', $dados);
+    }
 
 }

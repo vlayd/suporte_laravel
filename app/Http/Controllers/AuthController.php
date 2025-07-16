@@ -41,6 +41,7 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'nome' => $user->nome,
+                'setor' => $user->setor,
                 'nivel' => $user->suporte,
             ]
         ]);
@@ -54,5 +55,12 @@ class AuthController extends Controller
         ->back()
         ->withInput()
         ->with('loginError', $message);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('user');
+        // session()->forget('user');
+        return redirect()->to('/');
     }
 }

@@ -72,6 +72,26 @@ function listar(periodo = '') {
     });
 }
 
+function prepareCancel(idChamado) {
+    $('#btnSim').attr('onclick', 'cancelarChamado('+idChamado+')');
+}
+
+function cancelarChamado(idChamado) {
+    $.ajax({
+        url: currentBaseUrl+'cancelachamado',
+        method: 'POST',
+        data: {idChamado: idChamado},
+        success: function (result) {
+            console.log(result);
+            if(result == 'success') location.href = url;
+            else toast('error', 'Erro ao cancelar chamado!');
+        },
+        error: function (result) {
+            toast('error', 'Erro desconhecido!');
+        }
+    });
+}
+
 function showTrStatus(classStatus){
     $('.status1').addClass('d-none');
     $('.status2').addClass('d-none');

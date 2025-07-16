@@ -36,11 +36,15 @@
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Descrição</div>
                     <div class="border text-sm px-2 pt-3"><?= $chamado['descricao'] ?></div>
                 </div>
-                <div class="col-12 col-sm-6 px-0">
+                <div class="col-12 col-md-6 col-lg-4 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Solicitante</div>
                     <div class="border text-sm py-3 px-2"><?= $chamado['nomeSolicitante'] ?></div>
                 </div>
-                <div class="col-12 col-sm-6 px-0">
+                <div class="col-12 col-md-6 col-lg-4 px-0">
+                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Setor</div>
+                    <div class="border text-sm py-3 px-2"><?= $chamado['nomeSetor'] ?></div>
+                </div>
+                <div class="col-12 col-lg-4 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Atendente</div>
                     <div class="border text-sm py-3 px-2">
                         <?php

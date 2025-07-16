@@ -1,6 +1,10 @@
+@php
+    $activeLista = 'active'
+@endphp
 @extends('layouts.main_layout')
 
 @section('breadcrumb')
+    <?=$breadcrumb?>
 @endsection
 
 @section('content')
@@ -42,6 +46,7 @@
     </div>
   </div>
 
+  @include('layouts.modals.modal_cancela_chamado')
 @endsection
 
 @section('js')

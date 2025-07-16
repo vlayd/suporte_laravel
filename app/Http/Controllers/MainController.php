@@ -13,11 +13,15 @@ class MainController extends Controller
             return view('login/index');
         }
 
+        // dd(session('user'));
         $dados = [
             'naoIniciados' => ['todos' => NAO_INICIADO, '30' => NAO_INICIADO_30, 'nao_visto' => NAO_INICIADO_NAO_VISTO],
             'emExecucao' => ['todos' => EM_EXECUCAO, '30' => EM_EXECUCAO_30, 'nao_visto' => EM_EXECUCAO_NAO_VISTO],
             'pendentes' => ['todos' => PENDENTE, '30' => PENDENTE_30, 'nao_visto' => PENDENTE_NAO_VISTO],
             'finalizados' => ['todos' => FINALIZADO, '30' => FINALIZADO_30, 'nao_visto' => FINALIZADO_NAO_VISTO],
+            'breadcrumb' => $this->breadcrumb([
+                ['Home']
+            ])
         ];
 
         return view('home/index', $dados);

@@ -5,6 +5,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Middleware\CheckIsLogged;
 use App\Http\Middleware\CheckIsNotLogged;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,7 @@ Route::middleware([CheckIsNotLogged::class])->group(function(){
 
 //Se logado
 Route::middleware([CheckIsLogged::class])->group(function(){
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::prefix('chamado')->group(function(){
         Route::get('/', [ChamadoController::class, 'index'])->name('chamado');
         Route::get('listar', [ChamadoController::class, 'listar'])->name('chamado.listar');
@@ -29,7 +32,18 @@ Route::middleware([CheckIsLogged::class])->group(function(){
         Route::post('select_services', [ChamadoController::class, 'selectServicos'])->name('chamado.select_services');
         Route::post('save', [ChamadoController::class, 'save'])->name('chamado.save');
         Route::post('sendmessage', [ChamadoController::class, 'saveChat'])->name('chamado.chat');
+        Route::post('cancelachamado', [ChamadoController::class, 'cancelaChamado'])->name('chamado.cancela');
         Route::get('updatestatus/{id_chamado}/{id_status}', [ChamadoController::class, 'updateStatus'])->name('chamado.updatestatus');
+
+        Route::prefix('relatorio')->group(function(){
+            Route::get('analitico', [ChamadoController::class, 'analitico'])->name('chamado.relatorio.analitico');
+            Route::get('estatistico', [ChamadoController::class, 'estatistico'])->name('chamado.relatorio.estatistico');
+
+            Route::prefix('pdf')->group(function(){
+                Route::post('analitico', [ChamadoController::class, 'pdfAnalitico'])->name('chamado.relatorio.pdf.analitico');
+                Route::post('estatistico', [ChamadoController::class, 'pdfEstatistico'])->name('chamado.relatorio.pdf.estatistico');
+            });
+        });
     });
 
     Route::prefix('categoria')->group(function(){
@@ -40,6 +54,15 @@ Route::middleware([CheckIsLogged::class])->group(function(){
     Route::prefix('servico')->group(function(){
         Route::get('/', [ServicoController::class, 'index'])->name('servico');
         Route::post('save', [ServicoController::class, 'save'])->name('servico.save');
+    });
+
+    Route::prefix('status')->group(function(){
+        Route::get('/', [StatusController::class, 'index'])->name('status');
+        Route::post('save', [StatusController::class, 'save'])->name('status.save');
+    });
+
+    Route::prefix('usuario')->group(function(){
+        Route::get('/', [UsuarioController::class, 'index'])->name('usuario');
     });
 });
 

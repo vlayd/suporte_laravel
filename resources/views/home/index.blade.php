@@ -1,6 +1,10 @@
+@php
+    $activeHome = 'active'
+@endphp
 @extends('layouts.main_layout')
 
 @section('breadcrumb')
+    <?=$breadcrumb?>
 @endsection
 
 @section('content')
@@ -8,7 +12,7 @@
     $txtSolicitacao = 'Minhas Solicitações';
     if (session('user.nivel') == 2) $txtSolicitacao = 'Solicitações dos Usuários'
 ?>
-<div class="card shadow-lg mx-4 mt-7">
+<div class="card shadow-lg mx-4 mt-2">
     <div class="card-body p-3">
         <div class="row gx-4">
             <div class="col-auto">
@@ -131,8 +135,4 @@
 @endsection
 
 @section('js')
-<script>
-    var item = 'Dashboard';
-    var subItem = 'Home'
-</script>
 @endsection

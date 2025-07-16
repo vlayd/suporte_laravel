@@ -1,9 +1,13 @@
+@php
+    $activeNovo = 'active'
+@endphp
 @extends('layouts.main_layout')
 
 @section('css')
 @endsection
 
 @section('breadcrumb')
+    <?=$breadcrumb?>
 @endsection
 
 @section('content')
@@ -76,7 +80,7 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                             <select class="form-control" name="solicitante" id="choices-basic-3" data-trigger>
                                 <option value="">Escolha</option>
                                 @foreach ($servidores as $servidor)
-                                <option value="{{$servidor->id}}" @if($optionSolicitante==$servidor->id) {{'selected'}} @endif>{{$servidor->nome}}</option>
+                                <option value="{{$servidor->id.'.'.$servidor->setor}}" @if($optionSolicitante==$servidor->id) {{'selected'}} @endif>{{$servidor->nome}}</option>
                                 @endforeach
                                 <option value="1000">Núcleo TI</option>
                             </select>

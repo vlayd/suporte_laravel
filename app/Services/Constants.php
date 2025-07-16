@@ -39,6 +39,20 @@ define(
 );
 
 define(
+    'SELECT_CHAMADO_ANALICO',
+    [
+        'chamados.dt_criacao',
+        'chamados.atendente',
+        'chamados.status',
+        'S.setor AS numSetor',
+        'A.nome AS nomeAtendente',
+        'ST.nome AS nomeSetor',
+        'servicos.nome AS nomeServico',
+        'status.nome AS nomeStatus'
+    ]
+);
+
+define(
     'SELECT_CHAMADO_EDIT',
     [
         'chamados.id AS idChamado',
@@ -69,6 +83,7 @@ define(
         'chamados.visto_user',
         'S.nome AS nomeSolicitante',
         'A.nome AS nomeAtendente',
+        'ST.nome AS nomeSetor',
         'servicos.nome AS nomeServico',
         'status.cor',
         'status.nome AS nomeStatus'
