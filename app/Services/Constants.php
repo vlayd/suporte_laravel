@@ -3,7 +3,9 @@
 define('NAME_APP', 'Suporte TI');
 
 define('PATH_APOIO', 'assets/img/apoio/');
+define('PATH_PERFIL', 'assets/upload/perfil/');
 define('PATH_UPLOAD', 'assets/upload/chamado/');
+define('PATH_FOTO', 'assets/upload/perfil/');
 
 define('EXTENSION_IMG', [
     'pdf' => PATH_APOIO.'pdf.jpg',

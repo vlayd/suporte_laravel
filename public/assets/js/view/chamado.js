@@ -1,8 +1,3 @@
-$.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
 // ========VARIÁVEIS BASE=============
 var url = window.location.href;
 var baseUrl = $('#base_url').html();
@@ -17,6 +12,11 @@ $(document).ready(function() {
     if(oldCategoria != '') changeServico(oldCategoria);
 });
 
+$.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 $('#form_save_chat').on("submit", function (e) {
     e.preventDefault();
     $.ajax({
@@ -32,7 +32,7 @@ $('#form_save_chat').on("submit", function (e) {
                 if(document.getElementById("div1")){
                     $('#div1').load(location.href + " #div1");
                     document.getElementsByClassName('ql-editor')[0].innerHTML = '';
-                    document.getElementById('inputfile').value= null;
+                    document.getElementById('inputfile').value= '';
                 }
             }
         },

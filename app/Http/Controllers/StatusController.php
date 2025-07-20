@@ -14,6 +14,7 @@ class StatusController extends Controller
             'breadcrumb' => $this->breadcrumb([
                 ['Gerenciar', route('status')], ['Informações', route('status')], ['Status']
             ]),
+            'titulo' => 'Gerenciar Status'
         ];
         return view('status.index', $dados);
     }

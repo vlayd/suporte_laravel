@@ -129,6 +129,19 @@
             </div>
 
         </div>
+
+        <!-- Históricos dos chamaods -->
+        <div class="mb-3 text-center mt-6">
+            <h5 class="mb-0">Interações dos Chamados</h5>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-12 pb-3">
+                <div class="table-responsive border rounded">
+                    <div class="text-center bg-gray-200 py-2">Categorias</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

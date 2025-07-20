@@ -1,9 +1,3 @@
-<?php
-$page = '';
-  //Isso é para pegar o item para javascript só pela url current
-//   $urlPath = str_replace(base_url(), '', current_url());
-//   $itemUrl = explode('/', $urlPath)[0];
-?>
 <!DOCTYPE html>
 <html lang="pt_BR">
 
@@ -13,7 +7,7 @@ $page = '';
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}">
   <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}">
-  <title>Título</title>
+  <title>{{$titulo??'Dashboard'}}</title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -62,7 +56,8 @@ $page = '';
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
               <div class="nav-link text-white font-weight-bold px-0">
-                <i class="fa fa-user me-sm-1"></i>
+                <!-- <i class="fa fa-user me-sm-1"></i> -->
+                <img src="{{asset(PATH_FOTO.'/'.session('user.id').'/'.session('user.foto'))}}" class="avatar avatar-sm rounded-circle me-2">
                 <span class="d-sm-inline d-none">{{session('user.nome')}}</span>
               </div>
             </li>

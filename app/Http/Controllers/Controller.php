@@ -46,6 +46,12 @@ abstract class Controller
         return date_format($date, 'd/m/Y H:i:s');
     }
 
+    protected function formataData($data) {
+        if($data == null) return '';
+        $date = date_create($data);
+        return date_format($date, 'd/m/Y');
+    }
+
     private function getWhere($idStatus = '', $naoVisto = '')
     {
         $where = [];
@@ -133,5 +139,13 @@ abstract class Controller
         } catch(\Throwable $e){
             return false;
         }
+    }
+
+    protected function verificaLink($link)
+    {
+        // $link = str_replace(' ', '%20', $link);
+        $file_headers = @get_headers($link);
+        if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found') return false;
+        else return true;
     }
 }

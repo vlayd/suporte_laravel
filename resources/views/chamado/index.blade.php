@@ -1,6 +1,4 @@
-@php
-    $activeLista = 'active'
-@endphp
+
 @extends('layouts.main_layout')
 
 @section('breadcrumb')
@@ -39,7 +37,6 @@
         </div>
 
         <div class="card-body px-0 pb-0" id="tabela_chamado">
-
         </div>
 
       </div>

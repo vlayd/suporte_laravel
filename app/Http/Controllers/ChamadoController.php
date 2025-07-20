@@ -13,7 +13,9 @@ class ChamadoController extends Controller
         $dados = [
             'breadcrumb' => $this->breadcrumb([
                 ['Chamados', route('chamado')], ['Lista']
-            ])
+            ]),
+            'titulo' => 'Lista de Chamados',
+            'activeLista' => 'active',
         ];
         return view('chamado.index', $dados);
     }
@@ -110,6 +112,8 @@ class ChamadoController extends Controller
             'anexosChat' => $anexosChat,
             'chats' => $chats,
             'status' => $status,
+            'activeLista' => 'active',
+            'titulo' => 'Detalhando Chamado',
         ];
 
         return view('chamado.detail', $dados);
@@ -132,7 +136,8 @@ class ChamadoController extends Controller
             'servicos' => $servicos,
             'breadcrumb' => $this->breadcrumb([
                 ['Chamados', route('chamado')], ['Novo']
-            ])
+            ]),
+            'titulo' => 'Novo Chamado'
         ];
         if($idChamado != ''){
             $chamado = DB::table('chamados')
@@ -142,6 +147,7 @@ class ChamadoController extends Controller
             $dados['chamado'] = $chamado;
             $dados['anexos'] = DB::table('anexos')->where(['id_chamado' => $idChamado, 'chat' => 0])->get();
             $dados['servicos'] = DB::table('servicos')->where('id_categoria', $chamado->idCategoria)->get();
+            $dados['titulo'] = 'Alterar Chamado';
         }
         return view('chamado/form_save', $dados);
     }
@@ -213,7 +219,7 @@ class ChamadoController extends Controller
         $request->validate(
             //rules
             [
-                'anexo_chat.*' => 'extensions:jpeg,png,jpg,gif'
+                'anexo_chat.*' => 'extensions:jpeg,png,jpg,gif,pdf,xls,xlsx,doc,docx'
             ],
             //error messages
             [
@@ -230,7 +236,7 @@ class ChamadoController extends Controller
         try {
             $idChat = DB::table('chat')->insertGetId($dados);
         } catch(\Throwable $e){
-            die('erro*Erro ao enviar mensagem!');
+            die('erro*Erro ao enviar mensagem!'.$e->getMessage());
         }
         $visto = ['visto_adm' => 0];
         if(session('user.nivel') != 1) $visto = ['visto_user' => 0];
@@ -283,17 +289,17 @@ class ChamadoController extends Controller
 
     public function analitico()
     {
-        return view('chamado.relatorio.analitico');
+        return view('chamado.relatorio.analitico', ['titulo' => 'Relatório Analítico']);
     }
 
 
 
     public function pdfAnalitico(Request $request)
     {
-        $hoje = date('Y-m-d', strtotime('+1 days'));
-        $primeiroDiaMes = date("Y-m-01", strtotime('+1 days'));
-        $inicio = $request['data_inicio']!=''?$request['data_inicio']:$hoje;
-        $fim = $request['data_fim']!=''?$request['data_fim']:$primeiroDiaMes;
+        $primeiroDiaMes = date("Y-m-01");
+        $ultimoDiaMes = date("Y-m-t");
+        $inicio = $request['data_inicio']!=''?$request['data_inicio']:$primeiroDiaMes;
+        $fim = $request['data_fim']!=''?$request['data_fim']:$ultimoDiaMes;
         $chamados = DB::table('chamados')
         ->select(SELECT_CHAMADO_ANALICO)
         ->join('rh.usuarios as S', 'chamados.solicitante', '=', 'S.id', 'LEFT')
@@ -301,12 +307,17 @@ class ChamadoController extends Controller
         ->join('rh.setores as ST', 'S.setor', '=', 'ST.id', 'LEFT')
         ->join('servicos', 'chamados.servico', '=', 'servicos.id')
         ->join('status', 'chamados.status', '=', 'status.id', 'LEFT')
-        ->whereBetween('dt_criacao', [$inicio, $fim])
+        ->whereNot('chamados.status', '5')
+        ->whereDate('dt_criacao', '>=', $inicio)
+        ->whereDate('dt_criacao', '<=', $fim)
         ->get();
-        // dd($chamados);
         $dados= [
             'type' => 'analitico',
             'chamados' => $chamados,
+            'data' => [
+                        'inicio' => $this->formataData($inicio),
+                        'fim' => $this->formataData($fim)
+                      ]
         ];
         return view('chamado.pdf.gerador', $dados);
     }

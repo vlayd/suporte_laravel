@@ -14,6 +14,7 @@ class ServicoController extends Controller
             'breadcrumb' => $this->breadcrumb([
                 ['Gerenciar', route('servico')], ['Informações', route('servico')], ['Serviços']
             ]),
+            'titulo' => 'Gerenciar Serviços',
             'servicos' => DB::table('servicos')
                                 ->select(SELECT_SERVICOS_INDEX)
                                 ->join('categorias', 'servicos.id_categoria', 'categorias.id')

@@ -1,5 +1,6 @@
-<?php
+<?php use Mpdf\Mpdf;
 $listaChamados = '';
+$nomeRelatorio = 'relatorio'.str_replace('/', '', $data['inicio']).'_'.str_replace('/', '', $data['fim']).'.pdf';
 foreach($chamados as $chamado){
     $date = date_create($chamado->dt_criacao);
     $dateFormatada = date_format($date, 'd/m/Y');
@@ -13,7 +14,6 @@ foreach($chamados as $chamado){
         </tr>
     ';
 }
-use Mpdf\Mpdf;
 $html = '
 <html>
     <head>
@@ -128,7 +128,7 @@ $html = '
     </head>
 
     <body>
-        <h2 class="dados">Relatório de Atividades de 01/07/2025 a 31/07/2025</h2>
+        <h2 class="dados">Relatório de Atividades de '.$data['inicio'].' a  '.$data['fim'].'</h2>
         <table>
             <thead>
                 <tr>
@@ -174,5 +174,5 @@ $mpdf->SetHTMLFooter('
 // echo $html;exit;
 $mpdf->AddPage('L', mgh: 2, mgt: 30, mgb: 20, mgf: 2, mgr: 10, mgl: 10);
 $mpdf->WriteHTML($html);
-$mpdf->Output();
+$mpdf->Output($nomeRelatorio, 'I');
 exit;

@@ -36,7 +36,7 @@ if (document.getElementById('data-list-usuarios')) {
       perPageSelect: null,
       columns: [
         {
-          select: 2,
+          select: 3,
             sort: "desc"
           }
         ]

@@ -98,7 +98,7 @@
             <div class="card-body overflow-auto overflow-x-hidden pb-4" id="div1">
                 <?php foreach ($chats as $chat) :
                     $nome = explode(' ', $chat['nome'])[0];
-                    $foto = 'https://setor-rh.com/' . $chat['foto'];
+                    $foto = PATH_PERFIL.$chat['id_usuario'].'/'.$chat['foto'];
                     $corNome = 'text-primary';
                     if ($chat['id_usuario'] == session('user.id')) {
                         $nome = '';
@@ -118,7 +118,7 @@
                 ?>
                     <div class="row {{$align}} mb-4 mt-3">
                         <div class="col-auto mt-1">
-                            <img src="{{$foto}}" class="avatar avatar-md" alt="avatar image">
+                            <img src="{{asset($foto)}}" class="avatar avatar-md" alt="avatar image">
                         </div>
                         <div class="col-auto">
                             <div class="card" <?=$color?>>
@@ -153,27 +153,23 @@
                     </div>
                 <?php endforeach ?>
             </div>
-            <?php if ($chamado['statusChamado'] == 2 || $chamado['statusChamado'] == 3) : ?>
+            <?php if ($chamado['statusChamado'] == 2 || $chamado['statusChamado'] == 3 || session('user.nivel') == 2) : ?>
                 <div class="card-footer shadow-lg bg-gray-200 text-dark rounded rounded-3 pb-0 px-3" id="div2">
                     <h6 class="mb-3">Digitar uma mensagem</h6>
                     <form id="form_save_chat">
-                        @csrf
                         <div class="row bg-white pb-4">
                             <div id="descricao_hid-1" class="d-none"></div>
-                            <div class="col-12 col-lg-7 mt-3">
+                            <div class="col-12 mt-3">
                                 <label class="form-label">Mensagem</label>
                                 <div id="descricao-1" style="height: 80px;"></div>
                                 <input type="hidden" name="descricao" id="hid_descricao-1" value="">
                             </div>
-                            <div class="col-12 col-lg-5 mt-4">
-                                <div class="row">
-                                    <label for="anexo_chat" class="form-label">Anexo</label>
-                                    <input class="form-control" name="anexo_chat[]" type="file" id="anexo_chat" multiple>
-                                    <input name="id_chamado" type="hidden" value="{{Crypt::encrypt($chamado['idChamado'])}}">
-                                    <div class="d-flex justify-content-start mt-4">
-                                        <button type="button" name="button" class="btn btn-light m-0 px-sm-3">Cancelar</button>
-                                        <button type="submit" form="form_save_chat" id="btnSave" class="btn bg-gradient-primary m-0 ms-2 px-sm-3">Enviar</button>
-                                    </div>
+                            <div class="col-12 mt-4">
+                                <label for="anexo_chat" class="form-label">Anexo</label>
+                                <input class="form-control" name="anexo_chat[]" type="file" id="anexo_chat" multiple>
+                                <input name="id_chamado" type="hidden" value="{{Crypt::encrypt($chamado['idChamado'])}}">
+                                <div class="mt-4">
+                                    <button type="submit" form="form_save_chat" id="btnSave" class="btn bg-gradient-primary m-0 ms-2 px-sm-3">Enviar</button>
                                 </div>
                             </div>
                         </div>

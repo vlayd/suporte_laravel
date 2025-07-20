@@ -15,37 +15,19 @@ $activeListaUser = 'active';
     <div class="col-12">
         <div class="card">
             <div class="card-header pb-0">
-                <div class="d-lg-flex">
-                    <div>
-                        <h5 class="mb-0">Status</h5>
-                    </div>
-                    <div class="ms-auto my-auto mt-lg-0 mt-4">
-                        <div class="ms-auto my-auto">
-                        </div>
-                    </div>
+                <div class="row px-0">
+                    <div class="mb-0 fs-4 fw-bold col-12 col-lg-auto text-center text-lg-start">Usuários</div>
+                    <div class="col-12 col-lg text-center text-lg-start">
+                        <div class="btn btn-primary botao_quantidade w-15" id="btn_solicitante">Solicitantes</div>
+                        <div class="btn botao_quantidade  w-15" id="btn_tudo">Todos</div>
+                        <a href="javascript:;" class="btn btn-danger ms-3" id="btn_atualiza">
+                            <i class="fas fa-sync-alt"></i>
+                        </a>
+                  </div>
                 </div>
             </div>
-            <div class="card-body px-0 pb-0">
-                <div class="table-responsive p-4">
-                    <table class="table align-items-center mb-0" id="data-list-usuarios">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nº</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nome</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantidade</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($usuarios as $usuario)
-                            <tr class="status" data-bs-toggle="modal" data-bs-target="#statusModal" id="tr{{$usuario->idUser}}">
-                                <td class="text-sm">{{$usuario->idUser}}</td>
-                                <td class="text-sm">{{$usuario->nome}}</td>
-                                <td class="text-sm">{{$usuario->qtChamado}}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+            <div class="card-body px-0 pb-0" id="tabela">
+                @include('usuario.tabela')
             </div>
 
         </div>
@@ -55,8 +37,6 @@ $activeListaUser = 'active';
 
 @endsection
 
-@section('js')
-<script src="<?= asset('assets/js/plugins/datatables.js') ?>" type="text/javascript"></script>
-<script src="<?= asset('assets/js/init/datatable.js') ?>" type="text/javascript"></script>
-<script src="<?= asset('assets/js/view/status.js') ?>" type="text/javascript"></script>
+@section('js2')
+<script src="<?= asset('assets/js/view/usuario.js') ?>" type="text/javascript"></script>
 @endsection

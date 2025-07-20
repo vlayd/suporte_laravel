@@ -14,6 +14,7 @@ class CategoriaController extends Controller
             'breadcrumb' => $this->breadcrumb([
                 ['Gerenciar', route('categoria')], ['Informações', route('categoria')], ['Categorias']
             ]),
+            'titulo' => 'Gerenciar Categorias'
         ];
         return view('categoria.index', $dados);
     }

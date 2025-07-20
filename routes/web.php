@@ -63,6 +63,8 @@ Route::middleware([CheckIsLogged::class])->group(function(){
 
     Route::prefix('usuario')->group(function(){
         Route::get('/', [UsuarioController::class, 'index'])->name('usuario');
+        Route::post('tabela', [UsuarioController::class, 'tabela'])->name('usuario.tabela');
+        Route::get('atualiza', [UsuarioController::class, 'atualiza'])->name('usuario.atualiza');
     });
 });
 
