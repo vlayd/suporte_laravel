@@ -50,26 +50,26 @@ class UsuarioController extends Controller
         foreach($servidores as $servidor){
             $fotoApi = str_replace(' ', '%20', $servidor->foto);
             $foto = explode('.', $servidor->foto);
-            $nomeFoto = $servidor->id.'.'.end($foto);
-            $pathFoto = PATH_FOTO.$servidor->id;
+            $nomeFoto = time().$servidor->id.'.'.end($foto);
+            $pathFoto = PATH_UPLOAD.$servidor->id.'/perfil';
             $urlFoto = 'https://setor-rh.com/'.$fotoApi;
             $valores = [
                 'nome' => $servidor->nome,
                 'rh' => array_search($servidor->situacao, $situacao),
                 'setor' => $servidor->setor,
-                'foto' => $nomeFoto,
+                // 'foto' => $nomeFoto,
             ];
             $atributos = [
                 'id' => $servidor->id,
             ];
             try {
                 DB::connection('rh')->table('usuarios')->updateOrInsert($atributos, $valores);
-                if(!$this->verificaLink($urlFoto) || $nomeFoto == 'no-image.png') continue;
-                $img = $pathFoto.'/'.$nomeFoto;
-                if(!file_exists($img)){
-                    if(!file_exists($pathFoto)) mkdir($pathFoto, 0755, true);
-                    file_put_contents($img, file_get_contents($urlFoto));
-                }
+                // if(!$this->verificaLink($urlFoto) || $nomeFoto == 'no-image.png') continue;
+                // $img = $pathFoto.'/'.$nomeFoto;
+                // if(!file_exists($img)){
+                //     if(!file_exists($pathFoto)) mkdir($pathFoto, 0755, true);
+                //     file_put_contents($img, file_get_contents($urlFoto));
+                // }
             } catch (\Throwable $th) {
                 continue;
             }

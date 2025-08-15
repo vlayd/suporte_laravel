@@ -1,5 +1,5 @@
 <div class="">
-    @if (session('user.nivel') == '2')
+    @if ($confirma)
     <a class="" href="#" id="dropdownMenuLink<?= $i??'' ?>" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="badge badge-<?= $chamado['cor'] ?> dropdown-toggle"><?= $chamado['nomeStatus'] ?></span>
     </a>

@@ -13,7 +13,7 @@
                 <td class="text-sm">
                     <div class="d-flex px-2">
                         <div>
-                            <img src="{{asset(PATH_FOTO.'/'.$usuario->idUser.'/'.$usuario->foto)}}" class="avatar avatar-sm rounded-circle me-2">
+                            <img src="{{RH_USUARIOS.$usuario->idUser.'/perfil/'.$usuario->foto}}" class="avatar avatar-sm rounded-circle me-2">
                         </div>
                         <div class="my-auto">
                             {{$usuario->nome}}
@@ -21,7 +21,7 @@
                     </div>
                 </td>
                 <td class="text-sm">{{$usuario->nomeSetor}}</td>
-                <td class="">
+                <td>
                     <span id="badgeNaoIniciadaNaoVisto" class="badge badge-lg bg-danger">{{$usuario->qtChamado}}</span>
                 </td>
             </tr>
@@ -29,6 +29,3 @@
         </tbody>
     </table>
 </div>
-
-<script src="<?= asset('assets/js/plugins/datatables.js') ?>" type="text/javascript"></script>
-<script src="<?= asset('assets/js/init/datatable.js') ?>" type="text/javascript"></script>

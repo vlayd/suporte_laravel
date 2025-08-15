@@ -38,7 +38,7 @@ $showInformacoes = 'show';
                         </thead>
                         <tbody>
                             @foreach ($status as $stat)
-                            <tr class="status" data-bs-toggle="modal" data-bs-target="#statusModal" id="tr{{$stat->id}}">
+                            <tr class="status" data-bs-toggle="modal" role="button" data-bs-target="#statusModal" id="tr{{$stat->id}}">
                                 <td>
                                     <h6 class="mb-0 text-sm" id="id{{$stat->id}}">{{$stat->id}}</h6>
                                 </td>

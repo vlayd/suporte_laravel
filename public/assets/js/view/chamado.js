@@ -47,7 +47,7 @@ if(document.querySelector('#botoes')){
     document.querySelector('#botoes').addEventListener('click', function(e){
         const id = e.target.id;
         const idButtonsPeriodo = ['btn30_dias', 'btn_tudo'];
-        const idButtonsStatus = ['status1', 'status2', 'status3', 'status4', 'status5'];
+        const idButtonsStatus = ['statusr', 'status1', 'status2', 'status3', 'status4', 'status5'];
         if(idButtonsStatus.includes(id)){
             $('.botao_status').removeClass('btn-success');
             $('#'+id).addClass('btn-success');
@@ -55,16 +55,17 @@ if(document.querySelector('#botoes')){
         } else if(idButtonsPeriodo.includes(id)){
             $('.botao_periodo').removeClass('btn-primary');
             $('.botao_status').removeClass('btn-success');
-            $('#status1').addClass('btn-success');
+            $('#statusr').addClass('btn-success');
             $('#'+id).addClass('btn-primary');
         }
     });
 }
 
-function listar(periodo = '') {
+function listar(intervalo = '') {
     $.ajax({
-        url: url + '/listar'+periodo,
-        method: 'GET',
+        url: currentBaseUrl + 'listar',
+        method: 'POST',
+        data: {lista: lista, intervalo: intervalo},
         dataType: 'html',
         success: function (result) {
             $('#tabela_chamado').html(result);
@@ -93,6 +94,7 @@ function cancelarChamado(idChamado) {
 }
 
 function showTrStatus(classStatus){
+    $('.statusr').addClass('d-none');
     $('.status1').addClass('d-none');
     $('.status2').addClass('d-none');
     $('.status3').addClass('d-none');

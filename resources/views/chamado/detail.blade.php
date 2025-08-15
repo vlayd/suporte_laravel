@@ -11,8 +11,8 @@
 <div class="row">
     <div class="card col">
         <div class="card-body">
-            <div class="row">
-                <h5 class="mb-4 col-12">Visualizar chamado</h5>
+            <div class="row text-center">
+                <h5 class="mb-4 col-12">Detalhes do chamado</h5>
                 <div class="col-6 px-0 border">
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Código</div>
                     <div class="text-sm py-3 px-2"><?= $chamado['idChamado'] ?></div>
@@ -24,27 +24,31 @@
                         @include('layouts.select.select_status')
                     </div>
                 </div>
-                <div class="col-12 col-lg px-0">
+                <div class="col-12 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Título</div>
                     <div class="border text-sm py-3 px-2"><?= $chamado['titulo'] ?></div>
-                </div>
-                <div class="col-12 col-lg px-0">
-                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Serviço</div>
-                    <div class="border text-sm py-3 px-2"><?= $chamado['nomeServico'] ?></div>
                 </div>
                 <div class="col-12 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Descrição</div>
                     <div class="border text-sm px-2 pt-3"><?= $chamado['descricao'] ?></div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 px-0">
-                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Solicitante</div>
-                    <div class="border text-sm py-3 px-2"><?= $chamado['nomeSolicitante'] ?></div>
+                <div class="col-12 col-md-6 px-0">
+                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Serviço</div>
+                    <div class="border text-sm py-3 px-2"><?= $chamado['nomeServico'] ?></div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4 px-0">
+                <div class="col-12 col-md-6 px-0">
+                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Categoria</div>
+                    <div class="border text-sm py-3 px-2"><?= $chamado['categoria'] ?></div>
+                </div>
+                <div class="col-12 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Setor</div>
                     <div class="border text-sm py-3 px-2"><?= $chamado['nomeSetor'] ?></div>
                 </div>
-                <div class="col-12 col-lg-4 px-0">
+                <div class="col-12 col-md-6 px-0">
+                    <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Solicitante</div>
+                    <div class="border text-sm py-3 px-2"><?= $chamado['nomeSolicitante'] ?></div>
+                </div>
+                <div class="col-12 col-md-6 px-0">
                     <div class="bg-gray-200 text-dark fw-bolder border py-3 px-2">Atendente</div>
                     <div class="border text-sm py-3 px-2">
                         <?php
@@ -58,11 +62,11 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-6 px-0 border">
+                <div class="col-sm-6 px-0 border">
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Solicitação</div>
                     <div class="text-sm py-3 px-2"><?= $chamado['dt_criacao'] ?></div>
                 </div>
-                <div class="col-6 px-0 border">
+                <div class="col-sm-6 px-0 border">
                     <div class="bg-gray-200 text-dark fw-bolder py-3 px-2">Conclusão</div>
                     <div class="text-sm py-3 px-2"><?= $chamado['dt_conclusao'] ?></div>
                 </div>
@@ -73,9 +77,9 @@
                             $tmp = explode('.', $anexo['arquivo']);
                         ?>
                             <div class="me-2">
-                                <a href="<?= asset(PATH_UPLOAD . $anexo['id_chamado'] . '/' . $anexo['arquivo']) ?>" download="<?= $anexo['arquivo'] ?>" target="_blank">
+                                <a href="<?= asset(PATH_UPLOAD_CHAMADO . $anexo['id_chamado'] . '/' . $anexo['arquivo']) ?>" download="<?= $anexo['arquivo'] ?>" target="_blank">
                                     <img src="<?= asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file']) ?>" alt="" height="30" class="my-3">
-                                    <span><?= $anexo['arquivo'] ?></span>
+                                    <span><?= $anexo['nome'] ?></span>
                                 </a>
                                 <div class=" ms-3 vr"></div>
                             </div>
@@ -98,7 +102,7 @@
             <div class="card-body overflow-auto overflow-x-hidden pb-4" id="div1">
                 <?php foreach ($chats as $chat) :
                     $nome = explode(' ', $chat['nome'])[0];
-                    $foto = PATH_PERFIL.$chat['id_usuario'].'/'.$chat['foto'];
+                    $foto = RH_USUARIOS.$chat['id_usuario'].'/perfil/'.$chat['foto'];
                     $corNome = 'text-primary';
                     if ($chat['id_usuario'] == session('user.id')) {
                         $nome = '';
@@ -134,7 +138,7 @@
                                                 if($anexoChat['chat'] != $chat['idChat']) continue;
                                                 $tmp = explode('.', $anexoChat['arquivo']); ?>
                                                 <div class="col-auto">
-                                                    <a href="<?= asset(PATH_UPLOAD . $anexoChat['id_chamado'] . '/' . $anexoChat['arquivo']) ?>" class="text-primary" download="<?= $anexoChat['arquivo'] ?>" target="_blank">
+                                                    <a href="<?= asset(PATH_UPLOAD_CHAMADO . $anexoChat['id_chamado'] . '/' . $anexoChat['arquivo']) ?>" class="text-primary" download="<?= $anexoChat['arquivo'] ?>" target="_blank">
                                                         <img src="<?= asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file']) ?>" alt="" height="30" class="">
                                                         <span><?= $anexoChat['nome'] ?></span>
                                                     </a>
@@ -153,7 +157,7 @@
                     </div>
                 <?php endforeach ?>
             </div>
-            <?php if ($chamado['statusChamado'] == 2 || $chamado['statusChamado'] == 3 || session('user.nivel') == 2) : ?>
+            <?php if ($cxChat) : ?>
                 <div class="card-footer shadow-lg bg-gray-200 text-dark rounded rounded-3 pb-0 px-3" id="div2">
                     <h6 class="mb-3">Digitar uma mensagem</h6>
                     <form id="form_save_chat">

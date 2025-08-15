@@ -26,7 +26,13 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
     <div class="col-12">
         <div class="card">
             <div class="card-header pb-0">
-                <h5 class="mb-0">Novo chamado</h5>
+                <div class="row">
+                    <div class="col-auto">
+                        <h5 class="mb-0">Novo chamado </h5>
+                    </div>
+                    <?=$btnOutro?>
+                </div>
+                
                 <p class="text-sm mb-0">Preencha os dados para criar um chamado</p>
                 <hr class="horizontal dark my-3">
             </div>
@@ -34,7 +40,7 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                 <form action="{{route('chamado.save')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-lg-6">
                             <label class="form-label mt-3">Categoria</label>
                             <select class="form-control" onchange="changeServico(this.value, <?=old('servico')??''?>)" name="categoria" id="choices-basic" data-trigger>
                                 <option value="">Escolha</option>
@@ -47,7 +53,7 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                                     <div class="text-danger mt-n4">{{$message}}</div>
                                 @enderror
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-lg-6">
                             <div id="select_servicos">
                                 <label class="form-label mt-3">Serviços</label>
                                 <select class="form-control" name="servico" id="choices_servicos" data-trigger>
@@ -66,23 +72,26 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                     </div>
 
                     <div class="row">
-                        <div class="col-{{session('user.nivel') == 2?'6':'12'}}">
+                        <div class="col-12 {{$btnOutro=='' && session('user.nivel') != 1?'col-lg-6':''}}">
                             <label class="form-label mt-3">Título</label>
+                            @if (!isset($chamado->solicitante) || $chamado->solicitante == session('user.id'))
                             <input class="form-control" type="text" name="titulo" id="titulo" value="{{$inputTitulo}}">
+                            @else
+                            <div class="form-control">{{$inputTitulo}}</div>
+                            @endif
                             {{-- show error --}}
                             @error('titulo')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        @if (session('user.nivel') == 2)
-                        <div class="col-6">
+                        @if ($btnOutro=='' && session('user.nivel') != 1)
+                        <div class="col-12 col-lg-6">
                             <label class="form-label mt-3">Solicitante</label>
                             <select class="form-control" name="solicitante" id="choices-basic-3" data-trigger>
                                 <option value="">Escolha</option>
                                 @foreach ($servidores as $servidor)
                                 <option value="{{$servidor->id.'.'.$servidor->setor}}" @if($optionSolicitante==$servidor->id) {{'selected'}} @endif>{{$servidor->nome}}</option>
                                 @endforeach
-                                <option value="1000">Núcleo TI</option>
                             </select>
                         </div>
                         @endif
@@ -93,15 +102,22 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                         <div id="descricao_hid-1" class="d-none"><?=$inputDescricao?></div>
                         <div class="col-12">
                             <label class="form-label">Descriçao</label>
+                            @if (!isset($chamado->solicitante) || $chamado->solicitante == session('user.id'))
                             <div id="descricao-1"></div>
                             <input type="hidden" name="descricao" id="hid_descricao-1" value="">
                             {{-- show error --}}
                             @error('descricao')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
+                            @else
+                                <div class="form-control">
+                                    <?=$inputDescricao?>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
+                    @if (!isset($chamado->solicitante) || $chamado->solicitante == session('user.id'))
                     <div class="row mt-7">
                         <div class="col-12 mt-3">
                             <label for="input_anexo" class="form-label">Anexos</label>
@@ -112,6 +128,8 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                             @enderror
                         </div>
                     </div>
+                    @endif
+                    
 
                     @if (isset($anexos))
                     <div class="col-12 py-3 ms-2">
@@ -120,12 +138,14 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                                 $tmp = explode('.', $anexo->arquivo);
                             ?>
                             <div class="me-2">
-                                <a href="{{ asset(PATH_UPLOAD . $anexo->id_chamado . '/' . $anexo->arquivo)}}" download="{{$anexo->arquivo}}" target="_blank">
+                                <a href="{{ asset(PATH_UPLOAD_CHAMADO . $anexo->id_chamado . '/' . $anexo->arquivo)}}" download="{{$anexo->arquivo}}" target="_blank">
                                     <img src="{{asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file'])}}" alt="" height="30" class="my-3">
                                     <span>{{$anexo->arquivo}}</span>
                                 </a>
+                                @if ($chamado->solicitante == session('user.id'))
                                 <a href="javascript:;" onclick="excluirAnexo(<?=$anexo->id?>)"><i class="fas fa-times-circle fa-lg text-danger"></i></a>
-                                <div class=" ms-3 vr"></div>
+                                @endif
+                                <div class="ms-3 vr"> </div>
                             </div>
                             <?php endforeach?>
                         </div>
@@ -148,10 +168,6 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
 @endsection
 
 @section('js')
-<script>
-    var item = 'Dashboard';
-    var subItem = 'Home'
-</script>
 <script src="{{asset('assets/js/plugins/choices.min.js')}}"></script>
 <script src="{{asset('assets/js/plugins/select2.min.js')}}"></script>
 <script src="{{asset('assets/js/init/choices.js')}}"></script>

@@ -1,4 +1,5 @@
 <?php use Mpdf\Mpdf;
+
 $listaChamados = '';
 $nomeRelatorio = 'relatorio'.str_replace('/', '', $data['inicio']).'_'.str_replace('/', '', $data['fim']).'.pdf';
 foreach($chamados as $chamado){
@@ -158,13 +159,13 @@ $mpdf->SetHTMLFooter('
 <hr>
 <div style="font-size: 0.7em;">
     <div style="text-align: center;">
-        Endereço: Travessa Habitasa, nº 95 - Habitasa - CEP 69.905-114, Rio Branco<br>
-        Telefone: (068) 3223-7000/3224-4576. E-mal: procon.acre@gmail.com
+        Endereço: Avenida Nações Unidas, nº 2870 - Estaçao Experimental - CEP 69.918-172, Rio Branco<br>
+        Telefone: (068) 3223-7000. E-mal: procon.acre@gmail.com
     </div>
     <table class="info_all">
         <tr class="info_footer">
-            <td class="info_footer1">Gerado em: {DATE j/m/Y} às '.date("H:i:s").'</td>
-            <td class="info_footer2">Relatório Analítico de Patrimônio de Informática</td>
+            <td class="info_footer1">Gerado em: {DATE d/m/Y} às '.date("H:i:s", strtotime('+2 hours')).'</td>
+            <td class="info_footer2">Relatório Analítico de Chamados da TI</td>
             <td class="info_footer3">{PAGENO}/{nbpg}</td>
         </tr>
     </table>

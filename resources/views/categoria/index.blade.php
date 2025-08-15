@@ -35,28 +35,36 @@
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nº</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nome</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Setor</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php $i = 1; @endphp
                             @foreach ($categorias as $categoria)
                             @php
+                            $setor = $categoria->idSetor==0?'Não definido':$categoria->setor;
                             $status = $categoria->status == 1
                                             ? '<span class="badge badge-success">Ativado</span>'
                                             : '<span class="badge badge-danger">Desativado</span>'
                             @endphp
-                            <tr class="categoria" data-bs-toggle="modal" data-bs-target="#categoriaModal" id="tr{{$categoria->id}}">
+                            <tr class="categoria" data-bs-toggle="modal" role="button" data-bs-target="#categoriaModal" id="tr{{$categoria->id}}">
                                 <td>
-                                    <h6 class="mb-0 text-sm" id="id{{$categoria->id}}">{{$categoria->id}}</h6>
+                                    <h6 class="mb-0 text-sm" id="id{{$categoria->id}}">{{$i}}</h6>
                                 </td>
                                 <td>
                                     <p class="text-sm text-secondary mb-0"  id="nome{{$categoria->id}}">{{$categoria->nome}}</p>
                                 </td>
                                 <td>
+                                    <p class="text-sm text-secondary mb-0">{{$setor}}</p>
+                                </td>
+                                <td>
                                     <p class="text-sm text-secondary mb-0"><?=$status?></p>
                                     <div class="d-none" id="status{{$categoria->id}}">{{$categoria->status}}</div>
+                                    <div class="d-none" id="setor{{$categoria->id}}">{{$categoria->idSetor}}</div>
                                 </td>
                             </tr>
+                            @php $i++; @endphp
                             @endforeach
                         </tbody>
                     </table>

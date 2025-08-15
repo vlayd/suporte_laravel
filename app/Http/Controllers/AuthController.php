@@ -35,12 +35,12 @@ class AuthController extends Controller
         if($user->rh == '0')return $this->loginError('Usuário não autorizado!');
         $user = DB::connection('rh')->table('usuarios')->where(['cpf'=> $cpf, 'senha'=> md5($senha)])->first();
         if(!$user)return $this->loginError('Dados incorretos!');
-
-        //login user
+        $nomeNivel = DB::table('niveis')->where('id', $user->suporte)->first()->nome;
         session([
             'user' => [
                 'id' => $user->id,
                 'nome' => $user->nome,
+                'nome_nivel' => $nomeNivel,
                 'setor' => $user->setor,
                 'foto' => $user->foto,
                 'nivel' => $user->suporte,

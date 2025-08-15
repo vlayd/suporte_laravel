@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt_BR">
-
 <head>
   <meta charset="utf-8" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -26,6 +25,7 @@
 
 <body class="g-sidenav-show bg-gray-100">
   <div class="d-none" id="base_url">{{asset('')}}</div>
+  <div class="d-none" id="nao_visto_e">{{TODOS['nao_visto']['setor']}}</div>
 
   @include('layouts.sidebar_main')
 
@@ -55,10 +55,17 @@
           </div>
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <div class="nav-link text-white font-weight-bold px-0">
+              <div class="nav-link text-white font-weight-bold px-0 text-center">
                 <!-- <i class="fa fa-user me-sm-1"></i> -->
-                <img src="{{asset(PATH_FOTO.'/'.session('user.id').'/'.session('user.foto'))}}" class="avatar avatar-sm rounded-circle me-2">
-                <span class="d-sm-inline d-none">{{session('user.nome')}}</span>
+                <div class="row">
+                  <div class="col-auto p-0">
+                    <img src="{{RH_USUARIOS.session('user.id').'/perfil/'.session('user.foto')}}" class="avatar avatar-sm rounded-circle me-2">
+                  </div>
+                  <div class="col">
+                    <span class="d-sm-inline d-none">{{session('user.nome')}}</span>
+                    <div class="mt-n1 fs-6 opacity-6 fw-bold d-sm-block d-none">{{session('user.nome_nivel')}}</div>
+                  </div>
+                </div>
               </div>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -70,13 +77,13 @@
                 </div>
               </a>
             </li>
-            <li class="nav-item px-3 d-flex align-items-center">
-                <a href="javascript:;" class="nav-link text-white p-0" data-bs-toggle="dropdown" id="navbarDropdownMenu" aria-expanded="false">
-                    <i class="fa fa-cog cursor-pointer"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{route('logout')}}">Sair</a></li>
-                </ul>
+            <li class="nav-item px-3 d-flex align-items-center dropdown">
+              <a href="javascript:;" class="nav-link text-white p-0" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-cog cursor-pointer text-white"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{{route('logout')}}">Sair</a></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -159,32 +166,17 @@
 <!-- FIM Plugin theme -->
 
   <!--   Core JS Files   -->
-  <script src="{{asset('assets/core/jquery-3.6.0.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('assets/core/popper.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('assets/core/bootstrap.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('assets/fontawesome/js/all.min.js')}}" type="text/javascript"></script>
-  <script src="{{asset('assets/fontawesome/fontawesome/js/all.min.js')}}"></script>
+  <?=CDN_JS_CORE_ALL?>
+  <?=CDN_JS_FONTAWESOME_ALL?>
   <script src="{{asset('assets/js/plugins/dragula/dragula.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/jquery.mask.min.js')}}"></script>
   <script src="{{asset('assets/js/init/jquery.mask.js')}}"></script>
   <script src="{{asset('assets/js/plugins/jquery.toast.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
-
-  <!-- Kanban scripts -->
-  <script src="{{asset('assets/js/plugins/jkanban/jkanban.js')}}"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
   @yield('js')
   <script src="{{asset('assets/js/argon-dashboard.min.js?v=2.0.5')}}" type="text/javascript"></script>
-  <script src="{{asset('assets/js/view/pages.js')}}" type="text/javascript"></script>
+  <script src="{{asset('assets/js/view/home.js')}}" type="text/javascript"></script>
   @if (session('user.nivel') == 2)
   <script src="{{asset('assets/js/utils/refresh_ajax.js')}}" type="text/javascript"></script>
   @endif

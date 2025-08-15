@@ -10,7 +10,11 @@ class CategoriaController extends Controller
     public function index()
     {
         $dados = [
-            'categorias' => DB::table('categorias')->get(),
+            'categorias' => DB::table('categorias')
+                                ->select(SELECT_CATEGORIA_SETOR)
+                                ->join('rh.setores', 'categorias.setor', '=', 'rh.setores.id', 'LEFT')
+                                ->get(),
+            'setores' => DB::connection('rh')->table('setores')->get(),
             'breadcrumb' => $this->breadcrumb([
                 ['Gerenciar', route('categoria')], ['Informações', route('categoria')], ['Categorias']
             ]),
@@ -22,6 +26,7 @@ class CategoriaController extends Controller
     public function save(Request $request)
     {
         $nome = $request['nomeModal'];
+        $setor = $request['setorModal'];
         $id = $request['idModal'];
         $status = $request['statusModal']??0;
         if($nome == '') return 'Digite o nome!';
@@ -35,6 +40,7 @@ class CategoriaController extends Controller
 
         $dadosSave = [
             'nome' => $nome,
+            'setor' => $setor,
             'status' => $status
         ];
         if($id != '') DB::table('categorias')->where('id', $id)->update($dadosSave);

@@ -13,20 +13,24 @@ class MainController extends Controller
             return view('login/index');
         }
 
-        // dd(session('user'));
         $dados = [
-            'naoIniciados' => ['todos' => NAO_INICIADO, '30' => NAO_INICIADO_30, 'nao_visto' => NAO_INICIADO_NAO_VISTO],
-            'emExecucao' => ['todos' => EM_EXECUCAO, '30' => EM_EXECUCAO_30, 'nao_visto' => EM_EXECUCAO_NAO_VISTO],
-            'pendentes' => ['todos' => PENDENTE, '30' => PENDENTE_30, 'nao_visto' => PENDENTE_NAO_VISTO],
-            'finalizados' => ['todos' => FINALIZADO, '30' => FINALIZADO_30, 'nao_visto' => FINALIZADO_NAO_VISTO],
+            'categorias30' => $this->listaMain(periodo: '30'),
+            'categorias' => $this->listaMain(),
+            'servicos30' => $this->listaMain('S', periodo: '30'),
+            'servicos' => $this->listaMain('S'),
+            'naoIniciados' => ['todos' => $this->tabelaChamados('1'), '30' => $this->tabelaChamados('1'), 'nao_visto' => $this->tabelaChamados('1')],
+            'emExecucao' => ['todos' => $this->tabelaChamados('1'), '30' => $this->tabelaChamados('1'), 'nao_visto' => $this->tabelaChamados('1')],
+            'pendentes' => ['todos' => $this->tabelaChamados('1'), '30' => $this->tabelaChamados('1'), 'nao_visto' => $this->tabelaChamados('1')],
+            'finalizados' => ['todos' => $this->tabelaChamados('1'), '30' => $this->tabelaChamados('1'), 'nao_visto' => $this->tabelaChamados('1')],
             'breadcrumb' => $this->breadcrumb([
                 ['Home']
-            ])
+            ]),
+            'activeHome' => 'active'
         ];
 
         return view('home/index', $dados);
     }
-
+    
     private function testConnection()
     {
         // try {
@@ -35,5 +39,22 @@ class MainController extends Controller
         // } catch (\Exception $e) {
         //     die("Could not connect to the database.  Please check your configuration. error:" . $e );
         // }
+    }
+
+    //O default C é categoria e o outro é S, serviço
+    private function listaMain($item = 'C', $join = 'inner', $periodo = '')
+    {
+        $hoje = date('Y-m-d');
+        $ultimos30 = date('Y-m-d', strtotime('-30 days'));
+        $query = DB::table('chamados AS CH')
+                ->select(["$item.nome AS nome", "$item.id AS id", 'CH.dt_criacao', 'CH.visto_adm', 'CH.status'])
+                ->selectRaw("COUNT($item.nome) AS quantidade")
+                ->join('servicos AS S', 'CH.servico', '=', 'S.id')
+                ->join('categorias AS C', 'S.id_categoria', '=', 'C.id', $join)
+                ->groupBy("$item.nome")
+                ->orderByDesc('quantidade')
+                ->whereNot('CH.status', 4);
+        if($periodo == '30') $query = $query->whereDate('dt_criacao', '<=', $hoje)->whereDate('dt_criacao', '>=', $ultimos30);
+        return $query->get();
     }
 }

@@ -5,8 +5,10 @@ if (document.getElementById('data-list-1')) {
       perPageSelect: null,
       columns: [
         {
-          select: 0,
-            sort: "asc"
+          select: 7,
+          type: "date",
+          format: "DD/MM/YYYY",
+          sort: "desc"
           }
         ]
     });
@@ -37,7 +39,8 @@ if (document.getElementById('data-list-usuarios')) {
       columns: [
         {
           select: 3,
-            sort: "desc"
+            sort: "desc",
+            type: "number"
           }
         ]
     });

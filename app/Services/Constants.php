@@ -1,11 +1,40 @@
 <?php
-
+define('URL_BASE', 'http://10.51.3.227/');
 define('NAME_APP', 'Suporte TI');
+
+define('CDN', URL_BASE.'cdn/');
+define('CDN_JS', URL_BASE.'cdn/assets/js/');
+define('CDN_ASSETS', URL_BASE.'cdn/assets/');
+define('CDN_JS_INIT', URL_BASE.'cdn/assets/js/init/');
+define('CDN_JS_CORE', URL_BASE.'cdn/assets/js/core/');
+define('CDN_JS_PLUGINS', URL_BASE.'cdn/assets/js/plugins/');
+define('CDN_FONTAWESOME', URL_BASE.'cdn/assets/fontawesome/');
+
+define('RH_USUARIOS', URL_BASE.'rh/public/assets/upload/usuarios/');
 
 define('PATH_APOIO', 'assets/img/apoio/');
 define('PATH_PERFIL', 'assets/upload/perfil/');
-define('PATH_UPLOAD', 'assets/upload/chamado/');
+define('PATH_UPLOAD', 'assets/upload/');
+define('PATH_UPLOAD_CHAMADO', 'assets/upload/chamado/');
 define('PATH_FOTO', 'assets/upload/perfil/');
+
+define('CDN_JS_CORE_ALL', '
+<script src="'.CDN_JS_CORE.'jquery-3.6.0.min.js"></script>
+<script src="'.CDN_JS_CORE.'popper.min.js"></script>
+<script src="'.CDN_JS_CORE.'bootstrap.min.js"></script>
+');
+
+define('CDN_JS_FONTAWESOME_ALL', '
+<script src="'.CDN_FONTAWESOME.'js/all.min.js"></script>
+<script src="'.CDN_FONTAWESOME.'fontawesome/js/all.min.js"></script>
+');
+
+define('CDN_JS_DATATABLES', '
+<script src="'.CDN_JS_PLUGINS.'datatables.js"></script>
+<script src="'.CDN_JS_INIT.'datatables.js"></script>
+');
+
+
 
 define('EXTENSION_IMG', [
     'pdf' => PATH_APOIO.'pdf.jpg',
@@ -20,6 +49,8 @@ define('EXTENSION_IMG', [
     'file' => PATH_APOIO.'file.png',
 ]);
 
+
+// ________________SELECT____________________
 define(
     'SELECT_CHAMADO_INDEX',
     [
@@ -28,6 +59,7 @@ define(
         'chamados.atendente',
         'chamados.solicitante',
         'chamados.dt_conclusao',
+        'chamados.dt_alteracao',
         'chamados.titulo',
         'chamados.status',
         'chamados.visto_adm',
@@ -35,6 +67,7 @@ define(
         'S.nome AS nomeSolicitante',
         'A.nome AS nomeAtendente',
         'servicos.nome AS nomeServico',
+        'categorias.setor AS setorCategoria',
         'status.cor',
         'status.nome AS nomeStatus'
     ]
@@ -87,6 +120,8 @@ define(
         'A.nome AS nomeAtendente',
         'ST.nome AS nomeSetor',
         'servicos.nome AS nomeServico',
+        'categorias.nome AS categoria',
+        'categorias.setor AS setorCategoria',
         'status.cor',
         'status.nome AS nomeStatus'
     ]
@@ -113,5 +148,16 @@ define(
         'servicos.status',
         'categorias.id AS idCategoria',
         'categorias.nome AS nomeCategoria',
+    ]
+);
+
+define(
+    'SELECT_CATEGORIA_SETOR',
+    [
+        'categorias.id AS id',
+        'categorias.nome AS nome',
+        'categorias.status',
+        'rh.setores.id AS idSetor',
+        'rh.setores.nome AS setor',
     ]
 );

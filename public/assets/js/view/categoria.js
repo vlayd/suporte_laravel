@@ -13,13 +13,8 @@ $.ajaxSetup({
 $('.categoria').on("click", function(e){
     classe = e.currentTarget.id;
     id = classe.replace('tr', '');
-    status_ = $('#status'+id).html() == 1?true:false;
-    console.log(status_);
-    $('[name="nomeModal"]').val($('#nome'+id).html());
-    $('[name="idModal"]').val($('#id'+id).html());
-    $('[name="statusModal"]').prop('checked', status_);
-    $('#categoriaModalLabel').html('Editar Categoria');
     if(id == '') emptyInputs();
+    else valuesInputs(id);
 });
 
 $('#form_save').on("submit", function (e) {
@@ -40,9 +35,21 @@ $('#form_save').on("submit", function (e) {
     });
 });
 
+function valuesInputs(id){
+    console.log($('#setor'+id).html());
+    
+    status_ = $('#status'+id).html() == 1?true:false;
+    $('[name="nomeModal"]').val($('#nome'+id).html());
+    $('[name="idModal"]').val($('#id'+id).html());
+    $('[name="statusModal"]').prop('checked', status_);
+    $('[name="setorModal"]').val($('#setor'+id).html()).change();
+    $('#categoriaModalLabel').html('Editar Categoria');
+}
+
 function emptyInputs(){
     $('[name="nomeModal"]').val('');
     $('[name="idModal"]').val('');
     $('[name="statusModal"]').prop('checked', true);
+    $('[name="setorModal"]').val('').change();
     $('#categoriaModalLabel').html('Adicionar Categoria');
 }

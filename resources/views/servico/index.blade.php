@@ -40,15 +40,16 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php $i = 1; @endphp @php $i++; @endphp
                             @foreach ($servicos as $servico)
                             @php
                             $status = $servico->status == 1
                                             ? '<span class="badge badge-success">Ativado</span>'
                                             : '<span class="badge badge-danger">Desativado</span>'
                             @endphp
-                            <tr class="servico" data-bs-toggle="modal" data-bs-target="#servicoModal" id="tr{{$servico->idServico}}">
+                            <tr class="servico" data-bs-toggle="modal" role="button" data-bs-target="#servicoModal" id="tr{{$servico->idServico}}">
                                 <td>
-                                    <h6 class="mb-0 text-sm" id="id{{$servico->idServico}}">{{$servico->idServico}}</h6>
+                                    <h6 class="mb-0 text-sm" id="id{{$servico->idServico}}">{{$i}}</h6>
                                 </td>
                                 <td>
                                     <p class="text-sm text-secondary mb-0"  id="nome{{$servico->idServico}}">{{$servico->nomeServico}}</p>
@@ -62,6 +63,8 @@
                                     <div class="d-none" id="categoria{{$servico->idServico}}">{{$servico->idCategoria}}</div>
                                 </td>
                             </tr>
+                            @php $i++; @endphp
+                                
                             @endforeach
                         </tbody>
                     </table>

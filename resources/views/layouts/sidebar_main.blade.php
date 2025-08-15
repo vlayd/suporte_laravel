@@ -27,16 +27,56 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">CHAMADO</h6>
             </li>
             <li class="nav-item">
-                <a href="{{route('chamado')}}" class="nav-link {{$activeLista??''}}">
+                @if (session('user.nivel') != 1)
+                <a data-bs-toggle="collapse" aria-controls="listaColapse" role="button" aria-expanded="false" href="#listaColapse" class="nav-link {{$activeLista??''}}">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                         <i class="fas fa-list text-warning text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text mx-1">Lista </span>
-                    <span id="no_view_d" class="badge bg-danger badge-circle {{NAO_VISTO > 0 ?'':'d-none'}}">
-                        <div id="no_view_d2">{{NAO_VISTO}}</div>
+                    <span class="badge bg-danger badge-circle {{TODOS['nao_visto']['setor'] > 0 ?'':'d-none'}} badge_nao_visto">
+                        <div class="nao_visto_setor">{{TODOS['nao_visto']['setor']}}</div>
                     </span>
-                    <div class="d-none" id="no_view_e">{{NAO_VISTO}}</div>
                 </a>
+                <div class="collapse {{$showLista??''}}" id="listaColapse">
+                    <ul class="nav ms-4">
+                        <li class="nav-item ">
+                            <a class="nav-link {{$activeListaenviados??''}}" href="{{route('chamado', 'enviados')}}">
+                                <span class="sidenav-mini-icon"> Env </span>
+                                <span class="sidenav-normal"> Enviados </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link {{$activeListarecebidos??''}}" href="{{route('chamado', 'recebidos')}}">
+                                <span class="sidenav-mini-icon"> Rec </span>
+                                <span class="sidenav-normal me-1"> Recebidos</span>
+                                <span class="badge bg-danger badge-circle {{TODOS['nao_visto']['setor'] > 0 ?'':'d-none'}} badge_nao_visto">
+                                    <div class="nao_visto_setor">{{TODOS['nao_visto']['setor']}}</div>
+                                </span>
+                            </a>
+                        </li>
+                        @if (session('user.nivel')==2)
+                        <li class="nav-item ">
+                            <a class="nav-link {{$activeListatodos??''}}" href="{{route('chamado', 'todos')}}">
+                                <span class="sidenav-mini-icon"> Tod </span>
+                                <span class="sidenav-normal"> Todos </span>
+                            </a>
+                        </li>    
+                        @endif                        
+                    </ul>
+                </div>
+                @else
+                <a href="{{route('chamado', 'enviados')}}" role="button" class="nav-link {{$activeLista??''}}">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="fas fa-list text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text mx-1">Lista </span>
+                    <div id="no_view_d" class="d-none">{{TODOS['nao_visto']['todos']}}</div>
+                    <span class="no_view_e badge bg-danger badge-circle {{TODOS['nao_visto']['todos'] > 0 ?'':'d-none'}}">
+                        <div>{{TODOS['nao_visto']['todos']}}</div>
+                    </span>
+                </a>    
+                @endif
+                
             </li>
             <li class="nav-item">
                 <a href="{{route('chamado.novo')}}" class="nav-link {{$activeNovo??''}}">
