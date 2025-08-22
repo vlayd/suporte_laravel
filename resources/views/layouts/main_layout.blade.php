@@ -19,7 +19,6 @@
   <!-- CSS Files -->
   <link href="{{asset('assets/css/jquery.toast.min.css')}}" rel="stylesheet" />
   <link id="pagestyle" href="{{asset('assets/css/argon-dashboard.css?v=2.0.5')}}" rel="stylesheet" />
-<script src="{{asset('assets/js/plugins/sweetalert2.min.js')}}"></script>
 
 </head>
 
@@ -168,16 +167,14 @@
   <!--   Core JS Files   -->
   <?=CDN_JS_CORE_ALL?>
   <?=CDN_JS_FONTAWESOME_ALL?>
-  <script src="{{asset('assets/js/plugins/dragula/dragula.min.js')}}"></script>
-  <script src="{{asset('assets/js/plugins/jquery.mask.min.js')}}"></script>
-  <script src="{{asset('assets/js/init/jquery.mask.js')}}"></script>
-  <script src="{{asset('assets/js/plugins/jquery.toast.min.js')}}"></script>
+  <?=CDN_JS_TOAST?>
+  <?=CDN_JS_SWEETALERT2?>
   <script src="{{asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
   <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
   @yield('js')
   <script src="{{asset('assets/js/argon-dashboard.min.js?v=2.0.5')}}" type="text/javascript"></script>
   <script src="{{asset('assets/js/view/home.js')}}" type="text/javascript"></script>
-  @if (session('user.nivel') == 2)
+  @if (session('user.nivel') != 1)
   <script src="{{asset('assets/js/utils/refresh_ajax.js')}}" type="text/javascript"></script>
   @endif
   @yield('js2')

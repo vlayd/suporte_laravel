@@ -5,13 +5,15 @@ $nomeRelatorio = 'relatorio'.str_replace('/', '', $data['inicio']).'_'.str_repla
 foreach($chamados as $chamado){
     $date = date_create($chamado->dt_criacao);
     $dateFormatada = date_format($date, 'd/m/Y');
+    $atendente = explode(' ', $chamado->nomeAtendente)[0];
     $listaChamados .= '
         <tr>
             <td class="tdData">'.$dateFormatada.'</td>
             <td class="tdServico">'.$chamado->nomeServico.'</td>
-            <td class="tdSetor">'.$chamado->nomeSetor.'</td>
-            <td class="tdAtendente">'.$chamado->nomeAtendente.'</td>
+            <td class="tdSetor">'.$chamado->siglaSetor.'</td>
+            <td class="tdAtendente">'.$atendente.'</td>
             <td class="tdStatus">'.$chamado->nomeStatus.'</td>
+            <td class="tdObs">'.$chamado->observacao.'</td>
         </tr>
     ';
 }
@@ -138,6 +140,7 @@ $html = '
                     <th><div class="thtop">Setor</div></th>
                     <th><div class="thtop">Atendente</div></th>
                     <th><div class="thtop">Status</div></th>
+                    <th><div class="thtop">Observação</div></th>
                 </tr>
             </thead>
             <tbody>'.

@@ -51,17 +51,17 @@
 @if (session()->has('message'))
 <script>
     addEventListener('DOMContentLoaded', () =>{
-        Swal.fire({
-        title: "Sucesso",
-        text: "<?=session('message')?>",
-        icon: "success",
-  showConfirmButton: false,
-  timer: 1500
-      });
+      sweetSuccess('<?=session('message')?>')       
     });
-
+</script>
+@elseif (session()->has('erro'))
+<script>
+    addEventListener('DOMContentLoaded', () =>{
+      sweetErroBotao('<?=session('erro')?>')       
+    });
 </script>
 @endif
+@include('chamado.modals.modal_observacao')
 @endsection
 
 @section('js2')

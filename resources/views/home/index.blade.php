@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 @section('content')
 <?php
 $txtSolicitacao = 'Minhas Solicitações';
-if (session('user.nivel') == 2){
+if (session('user.nivel') == 2) {
     $txtSolicitacao = 'Solicitações dos Usuários';
 }
 ?>
@@ -85,14 +85,14 @@ if (session('user.nivel') == 2){
 
                 </div>
 
-                @if (session('user.nivel') != 1)
+                @if (session('user.nivel') == 2)
                 <!-- Históricos dos chamaods -->
                 <div class="mb-3 text-center mt-6">
                     <h5 class="mb-0">Interações dos Chamados</h5>
                 </div>
 
-                <div class="row p-2">
-                    <div class="col-12 pb-3 mt-3">
+                <div class="row p-2" id="tabela_controle">
+                    <div class="col-12 pb-3 mt-3" id="tabela_controle2">
                         <div class="table-responsive border rounded">
                             <div class="text-center bg-gray-200 py-2">Demandas do Serviços</div>
                             <table class="table align-items-center mb-0">
@@ -105,7 +105,7 @@ if (session('user.nivel') == 2){
                                                 <i class="fas fa-eye text-success"></i>
                                                 <i class="fas fa-eye-slash text-danger"></i>
                                             </div>
-                                        </th>                                        
+                                        </th>
                                         <th class="text-center">
                                             <div class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Em Execução</div>
                                             <div>
@@ -124,10 +124,10 @@ if (session('user.nivel') == 2){
                                             <p class="text-xs font-weight-bold mb-0 ps-2">{{$categoria->nome}}</p>
                                         </td>
                                         <td>
-                                            <p class="text-center text-xs mb-0">{{Controller::quatidadeVisto(1, 1, $categoria->id).' | '.Controller::quatidadeVisto(1, 0, $categoria->id)}}</p>
+                                            <p class="text-center text-xs mb-0"><?= Controller::quatidadeVisto(1, 1, $categoria->id) . ' | ' . Controller::quatidadeVisto(1, 0, $categoria->id) ?></p>
                                         </td>
                                         <td>
-                                            <p class="text-center text-xs mb-0">{{Controller::quatidadeVisto(2, 1, $categoria->id).' | '.Controller::quatidadeVisto(2, 0, $categoria->id)}}</p>
+                                            <p class="text-center text-xs mb-0"><?= Controller::quatidadeVisto(2, 1, $categoria->id) . ' | ' . Controller::quatidadeVisto(2, 0, $categoria->id) ?></p>
                                         </td>
                                         <td>
                                             <p class="text-center text-xs mb-0">{{Controller::quatidadeVisto(3, 1, $categoria->id)}}</p>

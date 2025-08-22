@@ -167,7 +167,7 @@ class ChamadoController extends Controller
     }
 
     public function novoEdit($idChamado = '')
-    {
+    {        
         $btnOutro = '<a href="'.route('chamado.novo', 'outro').'" class="col-auto btn btn-sm btn-primary text-xs">OUTRO SERVIDOR</a>';
         if(session('user.nivel') == 1) $btnOutro = '';
         $query = DB::table('categorias')->where('status', 1);
@@ -178,7 +178,11 @@ class ChamadoController extends Controller
             $query->where('setor', session('user.setor'));
             } else {
                 $idChamado = Operations::decriptId($idChamado);
-                if($idChamado == null || $idChamado == '') return redirect()->route('index');
+                if($idChamado == null || $idChamado == '') return redirect()->route('chamado', 'enviados')->with('erro', 'Url inválida...!');
+                else {
+                    $pesquisaStatus = $this->pesquisaStatus($idChamado);
+                    if ($pesquisaStatus != 1 && session('user.nivel') == 1) return redirect()->route('chamado', 'enviados')->with('erro', 'Esse chamdo já foi iniciado...!');
+                } 
             }            
         }
 
@@ -220,7 +224,14 @@ class ChamadoController extends Controller
     }
 
     public function save(Request $request)
-    {
+    {      
+        $rules = [
+                'titulo' => 'required',
+                'descricao' => 'required',
+                'categoria' => 'required|integer',
+                'servico' => 'required|integer',
+                'anexos.*' => 'extensions:jpeg,png,jpg,gif,pdf,xls,xlsx,doc,docx'
+        ];
         $request->validate(
             //rules
             [
@@ -239,8 +250,7 @@ class ChamadoController extends Controller
                 'anexos.extensions' => 'Formato não aceito...',
             ]
         );
-
-
+        
         $idSolicitante = session('user.id');
         $setorSolicitante = session('user.setor');
         if(isset($request['solicitante']) && $request['solicitante'] != ''){
@@ -257,19 +267,28 @@ class ChamadoController extends Controller
             'dt_criacao' => date("Y-m-d H:i:s"),
             'dt_conclusao' => null,
         ];
-        if(session('user.nivel') != 1) $dados['visto_adm'] = 1;
+        // if(session('user.nivel') != 1) $dados['visto_adm'] = 1;
 
-        $lastId = '';
+        $lastId = ''; 
         if(!isset($request['idChamado'])){
             $lastId = DB::table('chamados')->insertGetId($dados);
         } else {
             $lastId = $this->decriptId($request['idChamado']);
+            $pesquisaStatus = $this->pesquisaStatus($lastId);
+            if ($pesquisaStatus != 1 && session('user.nivel') == 1) return redirect()->route('chamado', 'enviados')->with('erro', 'Esse chamado já foi iniciado...!');
+                
             DB::table('chamados')->where('id', $lastId)->update($dados);
         }
 
         if($request->hasFile('anexos')) $this->uploadFileMultiple($request->file('anexos'), $lastId);
 
         return redirect()->route('chamado', 'enviados')->with('message', 'Chamado enviado...!');
+    }
+
+    public function saveObs(Request $request)
+    {
+        DB::table('chamados')->where('id', $request['id'])->update(['observacao' => $request['observacao']]);
+        return redirect()->route('chamado', 'recebidos')->with('message', 'Observação enviada...!');
     }
 
     public function saveChat(Request $request)
@@ -330,20 +349,24 @@ class ChamadoController extends Controller
     {
         $idAnexo = $request['id_anexo'];
         $anexo = DB::table('anexos')->find($request['id_anexo']);
-        $nomeImage = $anexo->arquivo;
         $idChamado = $anexo->id_chamado;
+        $pesquisaStatus = $this->pesquisaStatus($idChamado);
+        if($pesquisaStatus != 1 && session('user.nivel') == 1) return 'error';
+        $nomeImage = $anexo->arquivo;
         if($this->deleteAnexo(PATH_UPLOAD_CHAMADO.$idChamado, $nomeImage)){
             DB::table('anexos')->delete($idAnexo);
-            echo 'success';
-        } else  echo 'erro';
+            return 'success';
+        } else  return 'erro';
     }
 
     public function cancelaChamado(Request $request)
     {
-        $idChamado = $request['idChamado'];
-        $cancelado = DB::table('chamados')->where('id', $idChamado)->update(['status' => 5]);
-        if($cancelado == 1) echo 'success';
-        else echo 'erro';
+        //Precisa pesquisar status antes pra verificar se o mesmo continua em não iniciado
+        $pesquisaStatus = $this->pesquisaStatus($request['idChamado']);
+        if($pesquisaStatus != 1 && session('user.nivel') == 1) return 'error';
+        $cancelado = DB::table('chamados')->where('id', $request['idChamado'])->update(['status' => 5]);
+        if($cancelado == 1) return 'success';
+        else echo 'error';
     }
 
     public function analitico()
@@ -364,10 +387,13 @@ class ChamadoController extends Controller
         ->join('rh.usuarios as A', 'chamados.atendente', '=', 'A.id', 'LEFT')
         ->join('rh.setores as ST', 'S.setor', '=', 'ST.id', 'LEFT')
         ->join('servicos', 'chamados.servico', '=', 'servicos.id')
+        ->join('categorias', 'servicos.id_categoria', '=', 'categorias.id')
         ->join('status', 'chamados.status', '=', 'status.id', 'LEFT')
         ->whereNot('chamados.status', '5')
         ->whereDate('dt_criacao', '>=', $inicio)
         ->whereDate('dt_criacao', '<=', $fim)
+        ->where('categorias.setor', session('user.setor'))
+        ->where('chamados.status', 4)
         ->get();
         $dados= [
             'type' => 'analitico',
@@ -385,6 +411,12 @@ class ChamadoController extends Controller
         if(session('user.nivel') == 1 && $tipo != 'enviados') return false;
         elseif(!in_array($tipo, ['enviados', 'recebidos', 'todos'])) return false;
         return true;
+    }
+
+    private function pesquisaStatus($idChamado)
+    {
+        $pesquisaStatus = DB::table('chamados')->where('id', $idChamado)->first();
+        return $pesquisaStatus->status;
     }
 
 }

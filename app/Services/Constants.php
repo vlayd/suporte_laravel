@@ -1,7 +1,9 @@
 <?php
+//________________________TEXTOS BASE________________________________
 define('URL_BASE', 'http://10.51.3.227/');
-define('NAME_APP', 'Suporte TI');
+define('NAME_APP', 'Suporte');
 
+//________________________PATH_______________________________________
 define('CDN', URL_BASE.'cdn/');
 define('CDN_JS', URL_BASE.'cdn/assets/js/');
 define('CDN_ASSETS', URL_BASE.'cdn/assets/');
@@ -18,6 +20,7 @@ define('PATH_UPLOAD', 'assets/upload/');
 define('PATH_UPLOAD_CHAMADO', 'assets/upload/chamado/');
 define('PATH_FOTO', 'assets/upload/perfil/');
 
+//________________________JS_______________________________________
 define('CDN_JS_CORE_ALL', '
 <script src="'.CDN_JS_CORE.'jquery-3.6.0.min.js"></script>
 <script src="'.CDN_JS_CORE.'popper.min.js"></script>
@@ -34,8 +37,22 @@ define('CDN_JS_DATATABLES', '
 <script src="'.CDN_JS_INIT.'datatables.js"></script>
 ');
 
+define('CDN_JS_MASK', '
+<script src="'.CDN_JS_PLUGINS.'jquery.mask.min.js"></script>
+<script src="'.CDN_JS_INIT.'jquery.mask.js"></script>
+');
 
+define('CDN_JS_TOAST', '
+<script src="'.CDN_JS_PLUGINS.'jquery.toast.min.js"></script>
+<script src="'.CDN_JS_INIT.'jquery.toast.js"></script>
+');
 
+define('CDN_JS_SWEETALERT2', '
+<script src="'.CDN_JS_PLUGINS.'sweetalert2.min.js"></script>
+<script src="'.CDN_JS_INIT.'sweetalert2.js"></script>
+');
+
+//________________________ARRAYS UTEIS________________________________
 define('EXTENSION_IMG', [
     'pdf' => PATH_APOIO.'pdf.jpg',
     'xls' => PATH_APOIO.'excel.png',
@@ -64,6 +81,7 @@ define(
         'chamados.status',
         'chamados.visto_adm',
         'chamados.visto_user',
+        'chamados.observacao',
         'S.nome AS nomeSolicitante',
         'A.nome AS nomeAtendente',
         'servicos.nome AS nomeServico',
@@ -79,11 +97,14 @@ define(
         'chamados.dt_criacao',
         'chamados.atendente',
         'chamados.status',
+        'chamados.observacao',
         'S.setor AS numSetor',
         'A.nome AS nomeAtendente',
         'ST.nome AS nomeSetor',
+        'ST.sigla AS siglaSetor',
         'servicos.nome AS nomeServico',
-        'status.nome AS nomeStatus'
+        'status.nome AS nomeStatus',
+        'categorias.setor',
     ]
 );
 

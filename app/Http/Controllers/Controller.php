@@ -229,7 +229,7 @@ abstract class Controller
 
     public static function  quatidadeVisto($statusChamado, $visto, $idCategoria)
     {
-        return DB::table('chamados')
+        $conta = DB::table('chamados')
                     ->join('servicos', 'chamados.servico', '=', 'servicos.id', 'LEFT')
                     ->join('categorias', 'servicos.id_categoria', '=', 'categorias.id')
                     ->where([
@@ -237,5 +237,7 @@ abstract class Controller
                         'visto_adm' => $visto,
                         'categorias.id' => $idCategoria,
                     ])->count();
+        if($conta > 0 && $visto==0) return '<span class="text-danger fw-bold">'.$conta.'</span>';
+        return $conta;
     }
 }

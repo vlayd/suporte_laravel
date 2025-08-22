@@ -1,4 +1,12 @@
+<?php
+
+?>
+
 @php
+    if(session('user.nivel') == 1 && isset($chamado->status) && $chamado->status != 1){
+        //header('Location: '.asset('chamado/enviados'));exit;
+        return redirect()->route('chamado', 'enviados')->with('message', 'Chamado já está em execução...!');
+    }
     $activeNovo = 'active'
 @endphp
 @extends('layouts.main_layout')
@@ -76,13 +84,13 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                             <label class="form-label mt-3">Título</label>
                             @if (!isset($chamado->solicitante) || $chamado->solicitante == session('user.id'))
                             <input class="form-control" type="text" name="titulo" id="titulo" value="{{$inputTitulo}}">
-                            @else
-                            <div class="form-control">{{$inputTitulo}}</div>
-                            @endif
                             {{-- show error --}}
                             @error('titulo')
                                 <div class="text-danger">{{$message}}</div>
                             @enderror
+                            @else
+                            <div class="form-control">{{$inputTitulo}}</div>
+                            @endif
                         </div>
                         @if ($btnOutro=='' && session('user.nivel') != 1)
                         <div class="col-12 col-lg-6">
@@ -140,7 +148,7 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
                             <div class="me-2">
                                 <a href="{{ asset(PATH_UPLOAD_CHAMADO . $anexo->id_chamado . '/' . $anexo->arquivo)}}" download="{{$anexo->arquivo}}" target="_blank">
                                     <img src="{{asset(EXTENSION_IMG[end($tmp)] ?? EXTENSION_IMG['file'])}}" alt="" height="30" class="my-3">
-                                    <span>{{$anexo->arquivo}}</span>
+                                    <span>{{$anexo->nome}}</span>
                                 </a>
                                 @if ($chamado->solicitante == session('user.id'))
                                 <a href="javascript:;" onclick="excluirAnexo(<?=$anexo->id?>)"><i class="fas fa-times-circle fa-lg text-danger"></i></a>
@@ -169,7 +177,6 @@ $inputDescricao = old('descricao')!=null?old('descricao'):$chamado->descricao??'
 
 @section('js')
 <script src="{{asset('assets/js/plugins/choices.min.js')}}"></script>
-<script src="{{asset('assets/js/plugins/select2.min.js')}}"></script>
 <script src="{{asset('assets/js/init/choices.js')}}"></script>
 <script src="{{asset('assets/js/plugins/quill.min.js')}}"></script>
 <script src="{{asset('assets/js/init/quill.js')}}"></script>

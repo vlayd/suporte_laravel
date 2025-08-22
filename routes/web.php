@@ -10,6 +10,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Middleware\CheckIsAdmin;
 use App\Http\Middleware\CheckIsLogged;
 use App\Http\Middleware\CheckIsNotLogged;
+use App\Http\Middleware\CheckIsNoUser;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'index'])->name('index');
@@ -31,13 +32,14 @@ Route::middleware([CheckIsLogged::class])->group(function(){
         Route::post('deleteanexo', [ChamadoController::class, 'deleteAnexoChamado'])->name('chamado.deleteanexo');
         Route::post('select_services', [ChamadoController::class, 'selectServicos'])->name('chamado.select_services');
         Route::post('save', [ChamadoController::class, 'save'])->name('chamado.save');
+        Route::post('saveobs', [ChamadoController::class, 'saveObs'])->name('chamado.saveobs');
         Route::post('sendmessage', [ChamadoController::class, 'saveChat'])->name('chamado.chat');
         Route::post('cancelachamado', [ChamadoController::class, 'cancelaChamado'])->name('chamado.cancela');
         Route::get('retorna', [ChamadoController::class, 'retornaValores'])->name('chamado.retorna');
         Route::get('updatestatus/{id_chamado}/{id_status}', [ChamadoController::class, 'updateStatus'])->name('chamado.updatestatus');
         Route::get('{tipo?}', [ChamadoController::class, 'index'])->name('chamado');
 
-        Route::middleware([CheckIsAdmin::class])->group(function(){
+        Route::middleware([CheckIsNoUser::class])->group(function(){
             Route::prefix('relatorio')->group(function(){
                 Route::get('analitico', [ChamadoController::class, 'analitico'])->name('chamado.relatorio.analitico');
                 Route::get('estatistico', [ChamadoController::class, 'estatistico'])->name('chamado.relatorio.estatistico');

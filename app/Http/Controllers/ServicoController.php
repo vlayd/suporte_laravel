@@ -29,7 +29,6 @@ class ServicoController extends Controller
         $id = $request['idModal'];
         $categoria = $request['categoriaModal'];
         $status = $request['statusModal']??0;
-        if($nome == '') return 'Digite o nome!';
         $dados = [
             ['nome', $nome]
         ];

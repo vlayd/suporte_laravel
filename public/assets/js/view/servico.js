@@ -11,10 +11,9 @@ $.ajaxSetup({
 });
 
 $('.servico').on("click", function(e){
-    classe = e.currentTarget.id;
-    id = classe.replace('tr', '');
-    if(id == '') emptyInputs();
-    else valuesInputs(id);
+    id = $(this).data('id');    
+    if (id == '0') return emptyInputs();
+    valuesInputs(id);
 });
 
 $('#form_save').on("submit", function (e) {
@@ -28,7 +27,7 @@ $('#form_save').on("submit", function (e) {
         processData: false,
         success: function (result) {
             if(result == 'success') location.reload();
-            else $('#msg_erro').html(result);
+            else $('.msg_erro').html(result);
         },
         error: function (result) {
         }
@@ -54,4 +53,10 @@ function emptyInputs(){
     $('[name="statusModal"]').prop('checked', true);
     $('#servicoModalLabel').html('Adicionar Serviço');
     $('[name="categoriaModal"]').val($('#categoria'+id).html()).change();
+    resetErros();
+}
+
+function resetErros(){
+    $('.msg_erro').html('');
+    $('[name="nomeModal"]').removeClass('is-invalid');
 }

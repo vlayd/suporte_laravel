@@ -53,7 +53,7 @@
                                     <h6 class="mb-0 text-sm" id="id{{$categoria->id}}">{{$i}}</h6>
                                 </td>
                                 <td>
-                                    <p class="text-sm text-secondary mb-0"  id="nome{{$categoria->id}}">{{$categoria->nome}}</p>
+                                    <p class="text-sm text-secondary mb-0" id="nome{{$categoria->id}}">{{$categoria->nome}}</p>
                                 </td>
                                 <td>
                                     <p class="text-sm text-secondary mb-0">{{$setor}}</p>

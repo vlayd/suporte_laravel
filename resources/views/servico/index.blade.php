@@ -23,7 +23,7 @@
             </div>
             <div class="ms-auto my-auto mt-lg-0 mt-4">
               <div class="ms-auto my-auto">
-                <a data-bs-toggle="modal" data-bs-target="#servicoModal" class="btn bg-gradient-primary btn-sm mb-0 servico">+&nbsp; Nova Serviço</a>
+                <a data-bs-toggle="modal" data-bs-target="#servicoModal" class="btn bg-gradient-primary btn-sm mb-0 servico" data-id="0">+&nbsp; Nova Serviço</a>
               </div>
             </div>
           </div>
@@ -40,16 +40,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php $i = 1; @endphp @php $i++; @endphp
+                            @php $i = 1; @endphp
                             @foreach ($servicos as $servico)
                             @php
                             $status = $servico->status == 1
                                             ? '<span class="badge badge-success">Ativado</span>'
                                             : '<span class="badge badge-danger">Desativado</span>'
                             @endphp
-                            <tr class="servico" data-bs-toggle="modal" role="button" data-bs-target="#servicoModal" id="tr{{$servico->idServico}}">
+                            <tr class="servico" data-bs-toggle="modal" role="button" data-bs-target="#servicoModal" data-id="{{$servico->idServico}}">
                                 <td>
-                                    <h6 class="mb-0 text-sm" id="id{{$servico->idServico}}">{{$i}}</h6>
+                                    <h6 class="mb-0 text-sm" id="id{{$servico->idServico}}">{{$servico->idServico}}</h6>
                                 </td>
                                 <td>
                                     <p class="text-sm text-secondary mb-0"  id="nome{{$servico->idServico}}">{{$servico->nomeServico}}</p>

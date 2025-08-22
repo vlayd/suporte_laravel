@@ -9,7 +9,6 @@ $.ajaxSetup({
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
 $('.categoria').on("click", function(e){
     classe = e.currentTarget.id;
     id = classe.replace('tr', '');

@@ -86,7 +86,7 @@
                     <span class="nav-link-text ms-1">Novo</span>
                 </a>
             </li>
-            @if (session('user.nivel') == 2)
+            @if (session('user.nivel') == 2 || session('user.nivel') == 3)
             <li class="nav-item">
                 <a href="{{route('chamado.relatorio.analitico')}}" class="nav-link {{$activeRelatorio??''}}">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -95,6 +95,8 @@
                     <span class="nav-link-text ms-1">Relatório</span>
                 </a>
             </li>
+            @endif
+            @if (session('user.nivel') == 2)
             <li class="nav-item">
                 <hr class="horizontal dark" />
                 <h6 class="ps-4  ms-2 text-uppercase text-xs font-weight-bolder opacity-6">USUÁRIOS</h6>

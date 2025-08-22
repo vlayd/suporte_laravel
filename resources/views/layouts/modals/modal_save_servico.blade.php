@@ -14,7 +14,7 @@
                         <div class="col-12">
                             <label class="form-label mt-3">Nome</label>
                             <input class="form-control" type="text" name="nomeModal" value="" required>
-                            <div id="msg_erro" class="text-danger"></div>
+                            <div class="text-danger msg_erro"></div>
                         </div>
                         <div class="col-9">
                             <label class="form-label mt-3">Categoria</label>

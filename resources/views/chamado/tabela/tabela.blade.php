@@ -1,24 +1,33 @@
+<?php
+$thObs = '';
+if ($tipo == 'recebidos') $thObs = '<th class="d-none"></th>';
+?>
 <div class="table-responsive">
-    <table class="table table-flush" id="data-list-1">
+    <table class="table table-flush" id="data-list-chamados">
         <thead class="thead-light">
             <tr>
-                <th>Tickett</th>
+                <th>Ticket</th>
                 <th>Título</th>
                 <th>Serviço</th>
                 <th>Intervalo</th>
                 <th>Participantes</th>
                 <th>Status</th>
                 <th>Ações</th>
+                <?=$thObs?>
             </tr>
         </thead>
         <tbody>
             <?php $i = 1;
             foreach ($chamados as $chamado) :
+                $tdObs = '';
+                if ($tipo == 'recebidos') $tdObs = '<td class="d-none" id="observacao'.$chamado['idChamado'].'">'.$chamado['observacao'].'</td>';
+
                 $nomeCompleto = explode(' ', $chamado['nomeSolicitante']);
                 $nomeCompletoAtendente = explode(' ', $chamado['nomeAtendente']);
                 $atendente = current($nomeCompletoAtendente);
                 $solicitante = current($nomeCompleto); ?>
                 <tr class="status<?= $chamado['status']?> statusr">
+                    <td class="d-none"><?=date_format(date_create($chamado['dt_alteracao']), 'd/m/Y H:i')?></td>
                     <td class="text-sm"><?= $chamado['idChamado'] ?></td>
                     <td class="text-sm text-truncate" style="max-width: 300px;" data-toggle="tooltip" title="<?= $chamado['titulo'] ?>"><?= $chamado['titulo'] ?></td>
                     <td class="text-sm"><?= $chamado['nomeServico'] ?></td>
@@ -44,7 +53,8 @@
                     <td class="text-sm">
                         @include('layouts.btn.btn_acoes')
                     </td>
-                    <td class="d-none"><?=date_format(date_create($chamado['dt_alteracao']), 'd/m/Y H:i')?></td>
+                    <?=$tdObs?>
+                    
                 </tr>
             <?php $i++;
             endforeach; ?>
